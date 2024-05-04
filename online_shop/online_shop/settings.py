@@ -12,10 +12,14 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    os.getenv('ALLOWED_HOSTS').split(',')
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
+
+INTERNAL_IPS = [
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,10 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     'django_bootstrap5',
+    'django_bootstrap_icons',
 
-    'catalog.apps.CatalogConfig'
+    'store.apps.StoreConfig',
+    'pages.apps.PagesConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +58,18 @@ TEMPLATES_DIR = BASE_DIR / 'templates'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+LOGIN_REDIRECT_URL = 'store:home'
+
+LOGIN_URL = 'login'
+
 STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
@@ -67,6 +86,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'common.context_processors.main_categories'
             ],
         },
     },
@@ -75,13 +96,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'online_shop.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),  # Имя вашей базы данных
+        'USER': os.getenv('DB_USER'),  # Имя пользователя базы данных
+        'PASSWORD': os.getenv('DB_PASS'),  # Пароль пользователя базы данных
+        'HOST': os.getenv('DB_HOST'),  # Адрес сервера базы данных
+        'PORT': os.getenv('DB_PORT'),  # Порт сервера базы данных (по умолчанию 5432)
     }
 }
 
@@ -110,8 +132,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-STATIC_URL = 'static/'
-
+CSFR_FAILURE_VIEW = 'pages.views.csrf_failure'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

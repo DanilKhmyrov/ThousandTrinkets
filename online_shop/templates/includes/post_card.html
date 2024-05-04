@@ -1,0 +1,35 @@
+{% load humanize %}
+{% load custom_filters %}
+<section>
+    <div class="container px-4 px-lg-5 mt-5">
+        {% include 'includes/breadcrumb.html' %}
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in object_list %}
+            <div class="col mb-5">
+                <div class="card border-primary h-100">
+                    <a href="{% url 'store:product'  product.category.main_category.slug product.category.slug product.article_number %}" class="card-link">
+                        <!-- Product image-->
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid product-image">
+                        {% else %}
+                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="{{ product.name }}" class="img-fluid product-image">
+                        {% endif %} 
+                    <!-- Product details-->
+                    <div class="card-body p-2">
+                        <div class="text-center">
+                            <h6 class="fw-bolder">{{ product.name|truncatechars:25 }}</h6>
+                        </div>
+                    </div>
+                    <!-- Product price-->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            <h6 class="fw-bolder text-primary">{{ product.price|floatformat:0|intcomma|replace_commas|safe }} р.</h6>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

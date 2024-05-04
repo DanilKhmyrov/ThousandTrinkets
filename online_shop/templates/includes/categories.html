@@ -1,0 +1,42 @@
+{% load static %}
+<div class="container mt-5">
+    <!-- Carousel -->
+    <div id="categoryCarousel" class="carousel slide" data-mdb-ride="carousel">
+        <div class="carousel-inner">
+            {% for category in main_categories %}
+            <!-- Group items into rows of 3 (or adjust based on your preference) -->
+            {% if forloop.counter0|divisibleby:3 %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+            {% endif %}
+
+                    <div class="col-md-4">
+                        <figure class="photo blue">
+                            {% if category.image %}
+                                <img src="{{ category.image.url }}" alt="{{ category.name }}" class="img-fluid category-image">
+                            {% else %}
+                                <img src="https://moyinstrument.su/upload/resize_cache/iblock/4b4/360_300_1/obshchestroitelnyy_instrument_kupit_v_voronezhe.jpg" alt="{{ category.name }}" class="img-fluid category-image" />
+                            {% endif %}
+                            <figcaption>
+                                <h2><span>{{ category.name }}</span></h2>
+                            </figcaption>
+                            <a href="{% url 'store:main_category' category.slug %}"></a>
+                        </figure>
+                    </div>
+
+            {% if forloop.counter|divisibleby:3 or forloop.last %}
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev custom-prev-button" type="button" data-mdb-target="#categoryCarousel" data-mdb-slide="prev">
+            <i class="fas fa-angle-left fa-lg"></i>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next custom-next-button" type="button" data-mdb-target="#categoryCarousel" data-mdb-slide="next">
+            <i class="fas fa-angle-right fa-lg"></i>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>

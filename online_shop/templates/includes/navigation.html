@@ -1,0 +1,130 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom sticky-top">
+    <div class="container-nav d-flex align-items-center justify-content-between">
+        <!-- Логотип и название -->
+        <div class="logo-button d-flex align-items-center">
+            <a class="navbar-brand me-3" href="{% url 'store:home' %}" id="siteBrand">
+                <img src="{% static 'img/logo.png' %}" alt="1000 Мелочей" style="border-radius:5px;" width="40" height="40" class="d-inline-block align-text-top">
+            </a>
+            <button class="menu-toggle-btn" onclick="menuToggle()">
+                <i class="fas fa-bars"></i>
+                Меню
+            </button>
+        </div>
+        
+        <!-- Поисковый блок -->
+        <div class="search-container position-relative flex-grow-1 mx-3">
+            <form action="{% url 'store:search_results' %}" method="get" class="input-group">
+                <input type="search" id="search-input" name="query" class="form-control" placeholder="Поиск..." aria-label="Search">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <!-- Список предложений -->
+            <div id="suggestions" class="suggestions-list position-absolute bg-white border rounded mt-1 w-100" style="display: none;">
+                <ul id="suggestions-list" class="list-unstyled mb-0"></ul>
+                <button id="load-more" class="btn btn-secondary w-100 mt-2" style="display: none;">Загрузить больше</button>
+            </div>
+        </div>
+
+        <!-- Навигационные ссылки -->
+        <div class="d-flex align-items-center">
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto d-flex align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Корзина
+                            <i class="bi-cart-fill me-1"></i>
+                            <span class="badge rounded-pill badge-notification bg-danger">1</span>
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                            <span class="d-none d-lg-inline mr-5">{{ user.username }}</span> <!-- Имя скрыто на мобильных устройствах -->
+                            <img src="{% static 'icons/user.png' %}" alt="Profile" width="30" height="30" class="rounded-circle me-2">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Мой кабинет</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-address-card me-2"></i>Личные данные</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-building me-2"></i>Мои организации</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-shopping-bag me-2"></i>Мои заказы</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-heart me-2"></i>Избранное</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Выход</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'registration' %}">Регистрация</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Выдвижное меню -->
+<div id="menuDrawer" class="menu-drawer right-menu">
+    <button type="button" class="btn-close" aria-label="Close" onclick="closeMenuDrawer()"></button>
+    <div class="p-4">
+        <a href="{% url 'store:home' %}" class="nav-menu-item"><i class="fas fa-home me-3"></i>Главная</a>
+        <div class="accordion" id="accordionCatalog">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingCatalog">
+                    <button class="accordion-button category-btn nav-menu-item collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapseCatalog" aria-expanded="false"
+                        aria-controls="collapseCatalog">
+                        <i class="fas fa-dollar-sign me-3"></i>
+                        Каталог
+                    </button>
+                </h2>
+                <div id="collapseCatalog" class="accordion-collapse collapse" aria-labelledby="headingCatalog"
+                    data-bs-parent="#accordionCatalog">
+                    <div class="accordion-body">
+                        <ul class="list-group">
+                            {% for main_category in main_categories %}
+                            <li class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                                    <button class="accordion-button category-btn nav-menu-item collapsed"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false"
+                                        aria-controls="collapse{{ forloop.counter }}">
+                                        {{ main_category.name }}
+                                    </button>
+                                </h2>
+                                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+                                    aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#collapseCatalog">
+                                    <div class="accordion-body">
+                                        <ul class="list-group">
+                                            {% for category in main_category.categories.all %}
+                                            <li class="list-group-item">
+                                                <a href="{% url 'store:category' main_category.slug category.slug %}"
+                                                    class="category-link">
+                                                    {{ category.name }}
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'pages:about' %}" class="nav-menu-item"><i class="fas fa-building me-3"></i>О нас</a>
+        <a href="#" class="nav-menu-item"><i class="fas fa-search me-3"></i>Explore</a>
+        <a href="#" class="nav-menu-item"><i class="fas fa-wrench me-3"></i>Services</a>
+        <a href="#" class="nav-menu-item"><i class="fas fa-dollar-sign me-3"></i>Pricing</a>
+        <a href="#" class="nav-menu-item"><i class="fas fa-file-alt me-3"></i>Blog</a>
+    </div>
+</div>

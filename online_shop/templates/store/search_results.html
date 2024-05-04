@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5">
+    <h4>Результаты поиска</h4>
+    {% if query %}
+        <p>По запросу "{{ query }}" найдено {{ total_results }} результатов:</p>
+        {% for product in results %}
+            <div class="container mt-5">
+                <div class="row product-card">
+                    <div class="col-md-4">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid category-image">
+                        {% else %}
+                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="{{ product.name }}" class="img-fluid product-image">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h1 class="product-title">{{ product.name }}</h1>
+                        <p class="product-article"><strong>Артикул:</strong> {{ product.article_number }}</p>
+                        <div class="product-price">
+                            <strong>Цена:</strong>
+                            <span class="fw-bolder">{{ product.price|floatformat:0|intcomma|replace_commas|safe }} р.</span>
+                        </div>
+                        {% if user.is_superuser %}
+                        <div class="admin-fields mt-3">
+                            <p><strong>Закупочная цена:</strong> {{ product.purchase_price|floatformat:0|intcomma|replace_commas|safe }} р.</p>
+                            <p><strong>Остаток:</strong> {{ product.remains|floatformat:0|intcomma|replace_commas|safe }}</p>
+                            <p><strong>Стоимость остатка:</strong> {{ product.remains_cost|floatformat:0|intcomma|replace_commas|safe }} р.</p>
+                            <p><strong>Закупочная стоимость остатка:</strong> {{ product.retail_remains_cost|floatformat:0|intcomma|replace_commas|safe }} р.</p>
+                            <p><strong>Процент:</strong> {{ product.percent|floatformat:2 }}%</p>
+                        </div>
+                        {% endif %}
+                        <a href="#" class="btn btn-primary mt-3">Добавить в корзину</a>
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-primary mt-3">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Введите запрос для поиска.</p>
+    {% endif %}
+</div>
+{% endblock %}

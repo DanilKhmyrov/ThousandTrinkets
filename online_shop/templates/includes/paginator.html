@@ -1,0 +1,48 @@
+{% if page_obj.has_other_pages %}
+  <nav aria-label="Page navigation" class="my-5">
+    <ul class="pagination justify-content-center">
+      <!-- Кнопка "Первая" -->
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?{% if request.GET.query %}query={{ request.GET.query }}&{% endif %}page=1">Первая</a>
+        </li>
+      {% endif %}
+
+      <!-- Кнопка "Назад" -->
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?{% if request.GET.query %}query={{ request.GET.query }}&{% endif %}page={{ page_obj.previous_page_number }}">«</a>
+        </li>
+      {% endif %}
+
+      <!-- Показать только 3 страницы вокруг текущей -->
+      {% for i in page_obj.paginator.page_range %}
+        {% if page_obj.number == i %}
+          <!-- Текущая страница -->
+          <li class="page-item active">
+            <span class="page-link">{{ i }}</span>
+          </li>
+        {% elif i >= page_obj.number|add:'-1' and i <= page_obj.number|add:'1' %}
+          <!-- Страницы вокруг текущей -->
+          <li class="page-item">
+            <a class="page-link" href="?{% if request.GET.query %}query={{ request.GET.query }}&{% endif %}page={{ i }}">{{ i }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      <!-- Кнопка "Вперед" -->
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?{% if request.GET.query %}query={{ request.GET.query }}&{% endif %}page={{ page_obj.next_page_number }}">»</a>
+        </li>
+      {% endif %}
+
+      <!-- Кнопка "Последняя" -->
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?{% if request.GET.query %}query={{ request.GET.query }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Последняя</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}

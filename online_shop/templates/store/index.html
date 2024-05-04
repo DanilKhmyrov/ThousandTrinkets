@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load static %}
+  {% block title %}Домашняя страница магазина{% endblock title %}
+{% block content %}
+  {% include 'includes/header.html' %}
+  {% include 'includes/categories.html' %}
+  {% include 'includes/post_card.html' %}
+{% endblock content %}
