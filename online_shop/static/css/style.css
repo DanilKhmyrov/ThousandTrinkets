@@ -1,7 +1,7 @@
 /* General Styles */
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa;
+    background-color: #f4f5f6;
 }
 
 /* Branding */
@@ -342,9 +342,10 @@ a.nav-menu-item {
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(2, 239, 248, 0.505);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(64, 64, 64, 0.505);
 }
+
 
 .product-img {
     border-top-left-radius: 10px;
@@ -521,21 +522,6 @@ figure.photo.blue h2 {
     background: #007bff;
 }
 
-figure.photo.red {
-    background: #581a14;
-}
-
-figure.photo.red h2 {
-    background: #36100c;
-}
-
-figure.photo.yellow {
-    background: #7f5006;
-}
-
-figure.photo.yellow h2 {
-    background: #583804;
-}
 
 figure.photo:hover img,
 figure.photo.hover img {
@@ -562,10 +548,6 @@ figure.photo.hover:before {
 
 .carousel-control-next {
     opacity: 0.8;
-}
-
-body {
-    background-color: #ffffff;
 }
 
 .custom-prev-button,
@@ -683,14 +665,6 @@ body {
     background-color: #0056b3;
 }
 
-.suggestions-list {
-    max-height: 300px; /* Ограничение по высоте для скроллинга */
-    overflow-y: auto; /* Включаем вертикальную прокрутку */
-    z-index: 1000; /* Поднимаем над другими элементами */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень для списка предложений */
-    padding: 10px; /* Отступы внутри выпадающего списка */
-}
-
 .suggestions-list li {
     display: flex;
     align-items: center;
@@ -765,8 +739,9 @@ body {
     font-size: 1rem;
     color: #ffffff;
     cursor: pointer;
-    background-color: #007bff;
+    background-color: #484F55;
     border-radius: 5px;
+    border: none;
 }
 
 .search-container {
@@ -792,7 +767,7 @@ body {
 }
 
 .input-group .btn-primary {
-    background-color: #007bff;
+    background-color: #484F55;
     border: none;
     padding: 10px 15px;
     height: 45px;
@@ -808,7 +783,7 @@ body {
 }
 
 .suggestions-list {
-    max-height: 300px;
+    max-height: 500px;
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -909,11 +884,10 @@ body {
         order: 2;
         width: 100%;
     }
-    .logo-button,
+
     .navbar-brand,
     .menu-toggle-btn {
         align-items: stretch !important;
-        width: 100%;
         justify-content: space-between; /* Обеспечивает выравнивание на мобильных */
     }
 }
@@ -1009,4 +983,143 @@ body {
     position: absolute;
     top: 10px; /* Расстояние от верхнего края, можно изменить по необходимости */
     right: 10px; /* Расстояние от правого края, можно изменить по необходимости */
+}
+
+.profile-card-container {
+    background-color: #fff;
+    display: flex;
+    justify-content: space-evenly; /* Распределить карточки равномерно */
+    flex-wrap: wrap; /* Если карточек слишком много, они перейдут на следующую строку */
+    gap: 25px; /* Отступы между карточками */
+    border-radius: 12px;
+    padding: 20px;
+}
+
+
+.full-width-title {
+    flex-basis: 100%; /* Заголовок занимает всю ширину контейнера */
+    text-align: left; /* Выравниваем текст по левому краю */
+    margin-bottom: 15px;
+}
+
+
+.profile-card {
+    flex: 1; /* Карточки будут равномерно растягиваться */
+    min-width: 200px; /* Минимальная ширина карточки */
+    max-width: 220px; /* Максимальная ширина карточки */
+    background-color: #ffffff;
+    border: 1pt solid #a2a2a279;
+    border-radius: 16px;
+    padding: 15px;
+}
+
+.profile-card .card-body {
+    text-align: left; /* Выравнивание по левой стороне */
+}
+
+.profile-card i {
+    color: #000;
+    font-size: 2em;
+    display: inline-block;
+    padding: 7px;
+    border-radius: 7px;
+    background-color: #f4f5f6;
+    margin-bottom: 10px;
+}
+
+.favorite-outer{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between; /* Распределить карточки равномерно */
+    flex-wrap: wrap; /* Если карточек слишком много, они перейдут на следующую строку */
+}
+
+.favorite-card-container,
+.shopping-card-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    width: 48%; /* Или 50% - немного меньше, чтобы учесть пространство между блоками */
+}
+
+.favorite-card-container a,
+.shopping-card-container a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Чтобы элементы занимали всю ширину родительского контейнера */
+    text-decoration: none;
+    color: #333333;
+}
+
+.favorite-card-container i,
+.shopping-card-container i {
+    color:#000;
+    font-size: 2em;
+}
+
+.profile-sidebar {
+    background-color: #fff;
+    border-radius: 12px;
+}
+
+
+/* Стили для всей боковой панели */
+.profile-sidebar {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.profile-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.profile-section-title {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+/* Стили для ссылок */
+.profile-menu-item-link {
+    display: block;
+    padding: 1px;
+    padding-left: 5px;
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Эффект при наведении на всю область */
+.profile-menu-item-link:hover {
+    background-color: #f0f0f0;
+    color: #D60000;
+}
+
+@media (max-width: 992px) {
+    .logo-button {
+        justify-content: space-between;
+        width: 100%;
+    }
+}
+
+.favorite-button {
+    background-color: #fff;
+    border: none;
+}
+
+.top-card {
+    padding: 0 10px;
+}
+
+.top-card span {
+    font-size: 12px;
 }

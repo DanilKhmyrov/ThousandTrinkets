@@ -12,7 +12,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') + ['192.168.0.90']
 
 
 INTERNAL_IPS = [
@@ -103,7 +103,8 @@ DATABASES = {
         'USER': os.getenv('DB_USER'),  # Имя пользователя базы данных
         'PASSWORD': os.getenv('DB_PASS'),  # Пароль пользователя базы данных
         'HOST': os.getenv('DB_HOST'),  # Адрес сервера базы данных
-        'PORT': os.getenv('DB_PORT'),  # Порт сервера базы данных (по умолчанию 5432)
+        # Порт сервера базы данных (по умолчанию 5432)
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 

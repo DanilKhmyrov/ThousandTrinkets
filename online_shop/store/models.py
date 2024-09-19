@@ -1,7 +1,8 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
-# Создайте здесь ваши модели.
+User = get_user_model()
 
 
 class MainCategory(models.Model):

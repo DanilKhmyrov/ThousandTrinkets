@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Избранные товары {{ user.username }}</h2>
+    {% include 'includes/post_card.html' %}
+{% endblock %}

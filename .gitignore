@@ -8,11 +8,9 @@ __pycache__/
 
 # Distribution / packaging
 media/
-static/
-staticfiles
-.Python
-static/
+online_shop/static/mdb/
 staticfiles/
+.Python
 build/
 develop-eggs/
 dist/

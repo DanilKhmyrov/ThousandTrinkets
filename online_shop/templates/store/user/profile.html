@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container-fluid mt-5 mb-5">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="profile-sidebar">
+                    <h5 class="profile-title">Мой кабинет</h5>
+                    
+                    <!-- Секция покупок -->
+                    <div class="profile-section-title">Покупки</div>
+                    <a href="#" class="profile-menu-item-link">
+                        Мои заказы
+                    </a>
+                    <a href="#" class="profile-menu-item-link">
+                        История покупок
+                    </a>
+                    
+                    <!-- Секция профиля -->
+                    <div class="profile-section-title">Профиль</div>
+                    <a href="#" class="profile-menu-item-link">
+                        Мои отзывы и вопросы
+                    </a>
+                    <a href="#" class="profile-menu-item-link">
+                        Промокоды
+                    </a>
+                    <a href="#" class="profile-menu-item-link">
+                        Личные данные
+                    </a>
+                    <a href="#" class="profile-menu-item-link">
+                        Мои организации
+                    </a>
+            
+                    <!-- Секция товаров -->
+                    <div class="profile-section-title">Товары</div>
+                    <a href="#" class="profile-menu-item-link">
+                        Корзина
+                    </a>
+                    <a href="#" class="profile-menu-item-link">
+                        Избранное 
+                        <span class="badge rounded-pill bg-success">{{ products }}</span>
+                    </a>
+                    <a href="#" class="profile-menu-item-link">
+                        Просмотренные товары
+                    </a>
+                    <a href="#" class="profile-menu-item-link">
+                        Сравнение
+                    </a>
+            
+                    <!-- Секция сервиса и поддержки -->
+                    <div class="profile-section-title">Сервис и поддержка</div>
+                    <a href="#" class="profile-menu-item-link">
+                        Обмен, возврат и ремонт
+                    </a>
+                    <a href="#" class="profile-menu-item-link">
+                        Помощь по работе с сайтом
+                    </a>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="col-md-9 content">
+                <div class="profile-card-container">
+                    <h4 class="full-width-title">Мой кабинет</h4>
+                    <div class="profile-card">
+                        <div class="card-body">
+                            <i class="fas fa-box"></i>
+                            <h5 class="card-title">Мои заказы</h5>
+                            <p class="card-text">Пока нет заказов</p>
+                        </div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="card-body">
+                            <i class="fas fa-tags"></i>
+                            <h5 class="card-title">Промокоды</h5>
+                            <p class="card-text">Покупать с выгодой</p>
+                        </div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="card-body">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h5 class="card-title">Купленное снова</h5>
+                            <p class="card-text">Заказать снова</p>
+                        </div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="card-body">
+                            <i class="fas fa-eye"></i>
+                            <h5 class="card-title">Просмотренное</h5>
+                            <p class="card-text">Легко найти</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="favorite-outer">
+                    <div class="favorite-card-container">
+                        <a href="{% url 'user:favorites' %}">
+                            <i class="fas fa-heart"></i> Избранное {{ products }}
+                        </a>
+                    </div>
+                    <div class="shopping-card-container">
+                        <a href="#">
+                            <i class="fas fa-shopping-cart"></i> Корзина 0 товаров
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -4,7 +4,6 @@ from django.views.generic import DetailView, ListView
 from django.db.models import Q
 
 from .models import Product, Category, MainCategory
-from .forms import SearchForm
 
 
 def ajax_search(request):
@@ -41,7 +40,7 @@ def ajax_search(request):
 class SearchResultsView(ListView):
     model = Product
     template_name = 'store/search_results.html'
-    context_object_name = 'results'
+    context_object_name = 'products'
     paginate_by = 10
 
     def get_queryset(self):
@@ -71,9 +70,9 @@ class IndexListView(ListView):
     model = Product
     template_name = 'store/index.html'
     paginate_by = 28
+    context_object_name = 'products'
 
     def get_queryset(self):
-        # Загрузить связанные категории и главные категории для оптимизации запросов
         return Product.objects.select_related('category', 'category__main_category').all()
 
 
@@ -102,7 +101,6 @@ class CategoryListView(ListView):
     paginate_by = 28
 
     def get_queryset(self):
-        # Используем select_related для оптимизации запроса
         self.category = get_object_or_404(
             Category.objects.select_related('main_category'),
             slug=self.kwargs['category_slug']
@@ -124,7 +122,6 @@ class ProductDetailView(DetailView):
     slug_url_kwarg = 'article_number'
 
     def get_queryset(self):
-        # Используем select_related для оптимизации запросов
         return Product.objects.select_related('category', 'category__main_category').filter(
             article_number=self.kwargs['article_number']
         )

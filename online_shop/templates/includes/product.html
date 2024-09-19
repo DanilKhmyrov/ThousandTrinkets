@@ -13,6 +13,7 @@
         <div class="col-md-8">
             <h1 class="product-title">{{ product.name }}</h1>
             <p class="product-article"><strong>Артикул:</strong> {{ product.article_number }}</p>
+            {% include 'includes/favorite_button.html' %}
             <div class="product-price">
                 <strong>Цена:</strong>
                 <span class="fw-bolder">{{ product.price|floatformat:0|intcomma|replace_commas|safe }} р.</span>
@@ -27,7 +28,6 @@
                 <p><strong>Процент:</strong> {{ product.percent|floatformat:2 }}%</p>
             </div>
             {% endif %}
-
             <a href="#" class="btn btn-primary mt-3">Добавить в корзину</a>
         </div>
     </div>
