@@ -99,11 +99,10 @@ WSGI_APPLICATION = 'online_shop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),  # Имя вашей базы данных
-        'USER': os.getenv('DB_USER'),  # Имя пользователя базы данных
-        'PASSWORD': os.getenv('DB_PASS'),  # Пароль пользователя базы данных
-        'HOST': os.getenv('DB_HOST'),  # Адрес сервера базы данных
-        # Порт сервера базы данных (по умолчанию 5432)
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASS'),
+        'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
     }
 }

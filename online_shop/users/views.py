@@ -1,14 +1,54 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, DetailView
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
 
-from store.models import Product
+from store.models import Product, CartItem
 from .utils import get_product_count_text
 
 User = get_user_model()
+
+
+@login_required
+@require_POST
+def update_cart(request):
+    """Обработка изменения количества товаров в корзине через AJAX."""
+    product_id = request.POST.get('productId')
+    quantity = request.POST.get('quantity')
+    try:
+        quantity = int(quantity)
+    except ValueError:
+        return JsonResponse({'error': 'Некорректное количество'}, status=400)
+    if quantity < 1:
+        return JsonResponse({'error': 'Количество не может быть меньше 1'}, status=400)
+    user = request.user
+    cart = user.shopping_cart
+
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return JsonResponse({'error': 'Товар не найден'}, status=404)
+
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart, product=product)
+
+    if quantity == 0:
+        cart_item.delete()
+    else:
+        cart_item.quantity = quantity
+        cart_item.save()
+
+    total_items = cart.items.count()
+    total_price = cart.get_total_price()
+
+    return JsonResponse({
+        'total_items': total_items,
+        'total_price': total_price,
+        'item_quantity': cart_item.quantity if cart_item.id else 0
+    })
 
 
 @login_required
@@ -48,3 +88,11 @@ class UserFavoriteView(DetailView):
         context = super().get_context_data(**kwargs)
         context['products'] = self.object.favorites.all()
         return context
+
+
+class UserShoppingCartView(DetailView):
+    model = User
+    template_name = 'store/user/shopping_cart.html'
+
+    def get_object(self):
+        return self.request.user

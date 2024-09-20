@@ -373,14 +373,10 @@ a.nav-menu-item {
     font-size: 18px;
 }
 
-/* Additional Styles */
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,800);
 .container {
-    width: 90%; /* Установим ширину контейнера в 90% */
-    max-width: 1140px; /* Максимальная ширина для больших экранов */
     margin: 0 auto; /* Центрируем контейнер на экране */
     padding: 20px 0; /* Выравнивание по центру */
-    gap: 20px; /* Расстояние между карточками */
 }
 
 
@@ -1123,3 +1119,152 @@ figure.photo.hover:before {
 .top-card span {
     font-size: 12px;
 }
+
+/***** Основные стили *****/
+
+.custom-cart-item {
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.custom-cart-item-body {
+    padding: 15px;
+}
+
+.custom-cart-item-img {
+    border-radius: 4px;
+}
+
+.custom-cart-item-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.custom-cart-item-price {
+    font-size: 18px;
+    color: #ff0000;
+}
+
+.custom-btn-minus, .custom-btn-plus {
+    width: 30px;
+    height: 30px;
+    background-color: #f1f1f1;
+    border: none;
+    text-align: center;
+    line-height: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.custom-summary-block {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.custom-summary-block hr {
+    margin: 5px 0;
+}
+
+.custom-btn-checkout {
+    display: block;
+    background-color: #f53232;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-btn-checkout:hover {
+    background-color: #ff0000;
+    color: #000;
+}
+
+.cart-items {
+    height: 100%;
+    background-color: #fff;
+    border-radius: 12px;
+}
+
+.cart-resume {
+    padding-left: 30px;
+}
+
+.total-price {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.total-price .price {
+    font-size: 20px;
+    color: #141414;
+}
+
+.total-price h5 {
+    font-size: 24px;
+    color: #141414;
+    font-weight: 600;
+}
+
+.custom-summary-block .header {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #141414;
+}
+
+.custom-summary-block p {
+    color: #141414;
+    font-weight: 400;
+    font-size: 15px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+}
+/* Уменьшение размера иконок и текста */
+.nav-item .nav-link {
+    font-size: 12px; /* Уменьшаем размер текста под иконками */
+    color: #333;
+}
+
+.nav-item .nav-link i {
+    font-size: 20px; /* Уменьшаем размер иконок */
+    color: #555;
+}
+
+/* Уменьшение бейджа */
+.nav-item .badge {
+    font-size: 10px; /* Уменьшаем размер текста в бейдже */
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    padding: 0;
+    background-color: #ff0000;
+    color: white;
+    transform: translate(90%, -40%);
+}
+
+.nav-item.dropdown .badge {
+    transform: translate(50%, -50%);
+    font-size: 7px;
+    width: 13px;
+    height: 13px;
+    line-height: 13px;
+}
+
+/* Убираем точки */
+.nav-item::before {
+    content: none;
+}
+
+/* Позиционирование бейджа */
+.position-absolute {
+    position: absolute !important;
+}
+

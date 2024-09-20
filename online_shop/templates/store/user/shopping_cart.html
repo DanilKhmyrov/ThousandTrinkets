@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="row">
+                <!-- Левая часть: список товаров -->
+                <div class="cart-items col-lg-8">
+                    <h3 class="mb-4">Корзина</h3>
+
+                    <!-- Фильтр товаров -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <input type="checkbox" id="selectAll" class="form-check-input me-2">
+                            <label for="selectAll" class="form-check-label">Выделить все</label>
+                        </div>
+                        <button class="btn btn-link text-muted">Удалить выбранные</button>
+                    </div>
+
+                    <!-- Товар -->
+                    {% for item in user.shopping_cart.items.all %}
+                    <div class="custom-cart-item mb-3" data-product-id="{{ item.product.id }}">
+                        <div class="d-flex justify-content-between align-items-start p-3 custom-cart-item-body">
+                            <!-- Чекбокс и картинка -->
+                            <div class="d-flex align-items-start">
+                                <input type="checkbox" class="form-check-input item-checkbox me-3 mt-1">
+                                <div class="me-3">
+                                    <img src="https://placehold.co/80x80" alt="{{ item.product.name }}" style="width: 80px;" class="custom-cart-item-img">
+                                </div>
+                            </div>
+                            <!-- Описание товара -->
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="custom-cart-item-name mb-1">{{ item.product.name }}</h6>
+                                        <p class="text-muted mb-0">код: {{ item.product.article_number }}</p>
+                                        <p class="text-success mb-0">Можно забрать сегодня</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <!-- Цена за одну единицу товара -->
+                                        <p class="fw-bold custom-cart-item-price" data-price="{{ item.product.price }}">{{ item.product.price }} р.</p>
+                                        
+                                        <!-- Итоговая цена за количество -->
+                                        <p class="fw-bold total-item-price">{{ item.get_total_price }} р.</p>
+
+                                        <div class="d-flex align-items-center">
+                                            <button class="custom-btn-minus me-2" data-action="remove">-</button>
+                                            <input type="number" class="form-control item-quantity" value="{{ item.quantity }}" min="1" style="width: 60px; text-align: center;">
+                                            <button class="custom-btn-plus" data-action="add">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if not forloop.last %}
+                        <hr>
+                    {% endif %}
+                    {% endfor %}
+
+                    <!-- Если корзина пуста -->
+                    {% if not user.shopping_cart.items.all %}
+                    <div class="alert alert-warning" role="alert">
+                        Ваша корзина пуста.
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Правая часть: резюме заказа -->
+                <div class="cart-resume col-lg-4">
+                    <div class="custom-summary-block p-4">
+                        <h5 class="header">Самовывоз</h5>
+                        <p>г.Уварово ул.Октябрьская д.11/Г</p>
+                        <p>Забирать сегодня</p>
+                        <h5 class="header">Покупатель</h5>
+                        <p>{{ user.first_name }} {{ user.last_name }}</p>
+                        <p class="text-muted">{{ user.phone_number.as_national }}</p>
+                        <h5 class="header">Оплата</h5>
+                        <p>Оплата по QR-коду</p>
+                        <p>Товаров: <span id="total-items">{{ user.shopping_cart.items.count }}</span></p>
+                        <div class="total-price">
+                            <h5>Итого</h5>
+                            <p class="price fw-bold"><span id="total-price">{{ user.shopping_cart.get_total_price }}</span> р.</p>
+                        </div>
+                        <a href="#" class="custom-btn-checkout w-100 mt-4">Оформить заказ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script src="{% static 'js/select_all.js' %}"></script>
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
@@ -71,14 +72,53 @@ class Product(models.Model):
         upload_to='product_images/', blank=True, null=True, verbose_name='Изображение')
 
     def get_absolute_url(self):
-        # Предполагаем, что URL-имя для продукта - 'product', и оно принимает слаг главной категории, слаг категории и артикул
-        return reverse('store:product', args=[self.category.main_category.slug,
-                                              self.category.slug,
-                                              self.article_number])
+        return reverse('store:product',
+                       args=[self.category.main_category.slug,
+                             self.category.slug,
+                             self.article_number])
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
     class Meta:
+        ordering = ('id',)
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
+
+# TODO: Добавить общую скидку на коризну каждому пользователю, которая зависит от суммы заказа
+
+
+class ShoppingCart(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='shopping_cart')
+    products = models.ManyToManyField(Product, through='CartItem')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Корзина {self.user.username}'
+
+    class Meta:
+        ordering = ('id',)
+
+    def get_total_price(self):
+        """Возвращает общую сумму товаров в корзине"""
+        return sum(item.get_total_price() for item in self.items.all())
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(
+        ShoppingCart,
+        on_delete=models.CASCADE,
+        related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f'{self.product.name} в количестве {self.quantity}'
+
+    def get_total_price(self):
+        """Возвращает общую стоимость для данного товара в корзине"""
+        return self.product.price * self.quantity

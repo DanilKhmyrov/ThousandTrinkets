@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import MainCategory, Category, Product
+from .models import (CartItem, MainCategory, Category, Product, ShoppingCart)
 
 
 class CategoryInline(admin.TabularInline):
@@ -9,6 +9,7 @@ class CategoryInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(MainCategory)
 class MainCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'image_tag', 'icon_class')
     readonly_fields = ('image_tag',)
@@ -24,6 +25,7 @@ class MainCategoryAdmin(admin.ModelAdmin):
     image_tag.short_description = 'Изображение'
 
 
+@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'main_category', 'image_tag', 'icon_class')
     list_filter = ('main_category',)
@@ -38,12 +40,29 @@ class CategoryAdmin(admin.ModelAdmin):
     image_tag.short_description = 'Изображение'
 
 
+@admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category')
     list_filter = ('category',)
     search_fields = ('name',)
 
 
-admin.site.register(MainCategory, MainCategoryAdmin)
-admin.site.register(Category, CategoryAdmin)
-admin.site.register(Product, ProductAdmin)
+class CartItemInline(admin.TabularInline):
+    model = CartItem
+    extra = 0
+    fields = ('product', 'quantity', 'get_total_price')
+    readonly_fields = ('get_total_price',)
+
+    def get_total_price(self, obj):
+        return obj.get_total_price()
+    get_total_price.short_description = 'Общая стоимость товара'
+
+
+@admin.register(ShoppingCart)
+class ShoppingCartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'get_total_price', 'created_at', 'updated_at')
+    inlines = [CartItemInline]
+
+    def get_total_price(self, obj):
+        return obj.get_total_price()
+    get_total_price.short_description = 'Общая стоимость корзины'
