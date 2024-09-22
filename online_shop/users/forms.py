@@ -12,7 +12,7 @@ class RegistrationUserForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['email'].help_text = 'Необязательное поле'
         self.fields['phone_number'].help_text = 'Необязательное поле'
-        self.fields['phone_number'].label = 'Номер телефона'
+        self.fields['phone_number'].label = 'Введите ваш номер телефона'
 
     def save(self, commit=True):
         user = super().save(commit=False)

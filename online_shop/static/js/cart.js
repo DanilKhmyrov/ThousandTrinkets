@@ -60,7 +60,7 @@ $(document).ready(function() {
     // Функция пересчета и обновления итоговой цены для товара
     function updateTotalItemPrice(cartItem, itemPrice, quantity) {
         const totalItemPrice = cartItem.find('.total-item-price');
-        const totalPrice = (itemPrice * quantity).toFixed(2);  // Рассчитываем новую общую цену
+        const totalPrice = (itemPrice * quantity).toFixed(1);  // Рассчитываем новую общую цену
         totalItemPrice.text(totalPrice + ' р.');  // Обновляем текст с новой ценой
     }
 

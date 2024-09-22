@@ -1,0 +1,106 @@
+{% extends 'admin/base_site.html' %}
+{% block breadcrumbs %}
+    <!-- Здесь включаем breadcrumbs, используя структуру из найденного шаблона -->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'admin:index' %}">Главная</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Статистика</li>
+    </ol>
+{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Продажи</h1>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div id="salesChart"></div>
+        </div>
+        
+        <div class="col-lg-4">
+            <h5>Goal Completion</h5>
+            <div class="progress mb-2">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">Add Products to Cart: 160/200</div>
+            </div>
+            <div class="progress mb-2">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: 77%" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100">Complete Purchase: 310/400</div>
+            </div>
+            <div class="progress mb-2">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">Visit Premium Page: 480/800</div>
+            </div>
+            <div class="progress mb-2">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">Send Inquiries: 250/500</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок итогов -->
+    <div class="row mt-4">
+        <div class="col-lg-4">
+            <div class="info-box bg-success">
+                <span class="info-box-text">Total Revenue</span>
+                <span class="info-box-number">$35,210.43</span>
+                <span class="progress-description">17% increase from last month</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="info-box bg-danger">
+                <span class="info-box-text">Total Cost</span>
+                <span class="info-box-number">$10,390.90</span>
+                <span class="progress-description">0% from last month</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="info-box bg-primary">
+                <span class="info-box-text">Total Profit</span>
+                <span class="info-box-number">$24,813.53</span>
+                <span class="progress-description">20% increase from last month</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Подключение ApexCharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    var salesData = {{ sales_data|safe }};
+    var categories = {{ categories|safe }};
+
+    var options = {
+        chart: {
+            type: 'bar',
+            height: 650
+        },
+        series: [{
+            name: 'Колличество',
+            data: salesData
+        }],
+        xaxis: {
+            categories: categories
+        },
+        colors: ['#008FFB', '#00E396'],
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shade: 'light',
+                type: "vertical",
+                shadeIntensity: 1,
+                gradientToColors: ['#ABEBC6'],
+                inverseColors: false,
+                opacityFrom: 0.9,
+                opacityTo: 0.3,
+                stops: [0, 90, 100]
+            }
+        },
+    }
+
+    var chart = new ApexCharts(document.querySelector("#salesChart"), options);
+    chart.render();
+</script>
+
+{% endblock %}

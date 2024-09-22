@@ -8,6 +8,7 @@ from users.forms import RegistrationUserForm
 
 
 urlpatterns = [
+    path('admin/dashboard/', include('admin_panel.urls', namespace='custom_admin')),
     path('admin/', admin.site.urls),
     path('pages/', include('pages.urls', namespace='pages')),
     path('auth/', include('django.contrib.auth.urls')),

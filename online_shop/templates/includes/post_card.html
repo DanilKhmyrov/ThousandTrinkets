@@ -60,10 +60,10 @@
                     <div class="card-footer d-flex justify-content-between align-items-center p-2">
                         <!-- Цена -->
                         <div>
-                            {% if product.old_price %}
+                            {% comment %} {% if product.old_price %}
                                 <span class="text-muted text-decoration-line-through">{{ product.old_price|floatformat:0|intcomma }} р.</span>
                                 <span class="badge bg-success">-{{ product.discount }}%</span><br>
-                            {% endif %}
+                            {% endif %} {% endcomment %}
                             <span class="fw-bold text-primary">{{ product.price|floatformat:0|intcomma }} р.</span>
                         </div>
 

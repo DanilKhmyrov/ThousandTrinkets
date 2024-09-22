@@ -38,7 +38,7 @@
                     </a>
                     <a href="#" class="profile-menu-item-link">
                         Избранное 
-                        <span class="badge rounded-pill bg-success">{{ products }}</span>
+                        <span class="badge rounded-pill bg-success">{{ favorites_count }}</span>
                     </a>
                     <a href="#" class="profile-menu-item-link">
                         Просмотренные товары
@@ -98,8 +98,8 @@
                         </a>
                     </div>
                     <div class="shopping-card-container">
-                        <a href="#">
-                            <i class="fas fa-shopping-cart"></i> Корзина 0 товаров
+                        <a href="{% url 'user:shopping-cart' %}">
+                            <i class="fas fa-shopping-cart"></i> Корзина {{ cart_items_count }}
                         </a>
                     </div>
                 </div>

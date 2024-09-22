@@ -34,7 +34,7 @@
     </main>
     {% include 'includes/paginator.html' %}
     <!-- Подвал -->
-    {% include 'includes/footer.html' %}
+    {% comment %} {% include 'includes/footer.html' %} {% endcomment %}
     {% include 'includes/button_back2top.html' %}
     <div id="urls" data-update-cart-url="{% url 'user:update_cart' %}" data-ajax-search-url="{% url 'store:ajax_search' %}" data-favorite-url="{% url 'user:toggle_favorite' 0 %}"></div>
     <!-- Подключение MDB JS -->

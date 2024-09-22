@@ -41,7 +41,7 @@
                             <!-- Бейдж с количеством товаров в избранном -->
                             <span class="badge rounded-pill position-absolute">
                                 {% if user.is_authenticated %}
-                                    {{ user.favorites.count }}
+                                    {{ favorites_count }}
                                 {% else %}
                                     0
                                 {% endif %}
@@ -73,7 +73,7 @@
                             <!-- Бейдж с количеством товаров в корзине -->
                             <span class="badge rounded-pill position-absolute">
                                 {% if user.is_authenticated %}
-                                    {{ user.shopping_cart.products.count }}
+                                    {{ cart_items_count }}
                                 {% else %}
                                     0
                                 {% endif %}
@@ -91,7 +91,7 @@
                             <li><a class="dropdown-item" href="#"><i class="fas fa-address-card me-2"></i>Личные данные</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-building me-2"></i>Мои организации</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-shopping-bag me-2"></i>Мои заказы</a></li>
-                            <li><a class="dropdown-item" href="{% url 'user:favorites' %}"><i class="fas fa-heart me-2" style="font-size: 20px;"><span class="badge rounded-pill badge-notification">{{ user.favorites.count }}</span></i>Избранное</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user:favorites' %}"><i class="fas fa-heart me-2" style="font-size: 20px;"><span class="badge rounded-pill badge-notification">{{ favorites_count }}</span></i>Избранное</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Выход</a></li>
                         </ul>

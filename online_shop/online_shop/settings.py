@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
+from admin_panel.jazzmin_settings import JAZZMIN_SETTINGS
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -12,7 +14,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') + ['192.168.0.90']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') + ['192.168.0.109']
 
 
 INTERNAL_IPS = [
@@ -22,6 +24,7 @@ INTERNAL_IPS = [
 ]
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -36,6 +39,7 @@ INSTALLED_APPS = [
     'store.apps.StoreConfig',
     'pages.apps.PagesConfig',
     'users.apps.UsersConfig',
+    'admin_panel.apps.AdminPanelConfig',
 ]
 
 MIDDLEWARE = [
@@ -87,7 +91,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
-                'common.context_processors.main_categories'
+                'common.context_processors.main_categories',
+                'common.context_processors.favorites_and_cart_count',
             ],
         },
     },

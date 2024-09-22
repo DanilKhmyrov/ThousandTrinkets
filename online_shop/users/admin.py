@@ -13,8 +13,9 @@ class UserAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         return qs.prefetch_related('favorites')
 
-    exclude = ('favorites',)  # Исключаем поле из формы
+    exclude = ('favorites',)
 
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+    list_display = ('username', 'email', 'first_name',
+                    'last_name', 'is_staff', 'phone_number')
     search_fields = ('username', 'email')
     list_filter = ('is_staff', 'is_superuser', 'is_active')
