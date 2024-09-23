@@ -1258,13 +1258,14 @@ figure.photo.hover:before {
     line-height: 13px;
 }
 
-/* Убираем точки */
 .nav-item::before {
     content: none;
 }
 
-/* Позиционирование бейджа */
 .position-absolute {
     position: absolute !important;
 }
 
+.add-to-cart {
+    width: 50%;
+}

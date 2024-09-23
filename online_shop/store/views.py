@@ -1,11 +1,12 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
-from django.db.models import Q
+from django.db.models import Q, Prefetch, Exists, OuterRef
 
-from .models import Product, Category, MainCategory
+from .models import CartItem, Product, Category, MainCategory
 
 
+# FIXME: Не работает с пробелами или нужен частичный поиск
 def ajax_search(request):
     query = request.GET.get('query', '')
     results_per_page = 10
@@ -73,7 +74,25 @@ class IndexListView(ListView):
     context_object_name = 'products'
 
     def get_queryset(self):
-        return Product.objects.select_related('category', 'category__main_category').all()
+        user = self.request.user
+        if user.is_authenticated:
+            is_favorite = Exists(
+                user.favorites.filter(id=OuterRef('pk'))
+            )
+            is_in_cart = Exists(
+                CartItem.objects.filter(
+                    cart__user=user, product_id=OuterRef('pk'))
+            )
+
+            queryset = Product.objects.select_related('category', 'category__main_category').annotate(
+                is_favorite=is_favorite,
+                is_in_cart=is_in_cart
+            )
+        else:
+            queryset = Product.objects.select_related(
+                'category', 'category__main_category')
+
+        return queryset
 
 
 class MainCategoryListView(ListView):

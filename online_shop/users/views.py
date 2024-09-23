@@ -18,12 +18,12 @@ def update_cart(request):
     """Обработка изменения количества товаров в корзине через AJAX."""
     product_id = request.POST.get('productId')
     quantity = request.POST.get('quantity')
+
     try:
         quantity = int(quantity)
     except ValueError:
         return JsonResponse({'error': 'Некорректное количество'}, status=400)
-    if quantity < 1:
-        return JsonResponse({'error': 'Количество не может быть меньше 1'}, status=400)
+
     user = request.user
     cart = user.shopping_cart
 
@@ -47,7 +47,7 @@ def update_cart(request):
     return JsonResponse({
         'total_items': total_items,
         'total_price': total_price,
-        'item_quantity': cart_item.quantity if cart_item.id else 0
+        'item_quantity': cart_item.quantity if quantity > 0 else 0
     })
 
 
@@ -87,6 +87,7 @@ class UserFavoriteView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # FIXME: Доделать product.is_in_cart в контекстный процессор
         context['products'] = self.object.favorites.all()
         return context
 

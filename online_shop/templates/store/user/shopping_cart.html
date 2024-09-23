@@ -48,9 +48,9 @@
                                         <p class="fw-bold total-item-price">{{ item.get_total_price|floatformat:0  }} р.</p>
 
                                         <div class="d-flex align-items-center">
-                                            <button class="custom-btn-minus me-2" data-action="remove">-</button>
+                                            {% if item.quantity != 1 %}<button class="custom-btn-minus me-2" data-action="remove" data-product-id="{{ item.product.id }}">-</button>{% endif %}
                                             <input type="number" class="form-control item-quantity" value="{{ item.quantity }}" min="1" style="width: 60px; text-align: center;">
-                                            <button class="custom-btn-plus" data-action="add">+</button>
+                                            <button class="custom-btn-plus" data-action="add" data-product-id="{{ item.product.id }}">+</button>
                                         </div>
                                         <!-- Цена за одну единицу товара -->
                                         <p class="fw-bold custom-cart-item-price" data-price="{{ item.product.price }}">{{ item.product.price|floatformat:0 }} ₽/шт</p>
@@ -99,6 +99,5 @@
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'js/cart.js' %}"></script>
     <script src="{% static 'js/select_all.js' %}"></script>
 {% endblock %}

@@ -94,6 +94,9 @@
                             <li><a class="dropdown-item" href="{% url 'user:favorites' %}"><i class="fas fa-heart me-2" style="font-size: 20px;"><span class="badge rounded-pill badge-notification">{{ favorites_count }}</span></i>Избранное</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Выход</a></li>
+                            {% if user.is_staff %}
+                                <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-user me-2"></i>Админка</a></li>
+                            {% endif %}
                         </ul>
                     </li>
                     {% else %}
