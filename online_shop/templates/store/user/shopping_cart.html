@@ -7,7 +7,7 @@
             <div class="row">
                 <!-- Левая часть: список товаров -->
                 <div class="cart-items col-lg-8">
-                    <h3 class="mb-4">Корзина</h3>
+                    <h5 class="mt-4 header">Корзина</h5>
 
                     <!-- Фильтр товаров -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -17,13 +17,12 @@
                         </div>
                         <button class="btn btn-link text-muted">Удалить выбранные</button>
                     </div>
-
                     <!-- Товар -->
-                    {% for item in user.shopping_cart.items.all %}
+                    {% for item in cart_items %}
                     <div class="custom-cart-item mb-3" data-product-id="{{ item.product.id }}">
-                        {% include 'includes/favorite_button.html' with product=item.product %}
                         <div class="d-flex justify-content-between align-items-start p-3 custom-cart-item-body">
                             <!-- Чекбокс и картинка -->
+                            {% include 'includes/favorite_button.html' with product=item.product %}
                             <div class="d-flex align-items-start">
                                 <input type="checkbox" class="form-check-input item-checkbox me-3 mt-1">
                                 <div class="me-3">
@@ -65,7 +64,7 @@
                     {% endfor %}
 
                     <!-- Если корзина пуста -->
-                    {% if not user.shopping_cart.items.all %}
+                    {% if not cart_items_count %}
                     <div class="alert alert-warning" role="alert">
                         Ваша корзина пуста.
                     </div>
@@ -83,10 +82,10 @@
                         <p class="text-muted">{{ user.phone_number.as_national }}</p>
                         <h5 class="header">Оплата</h5>
                         <p>Оплата по QR-коду</p>
-                        <p>Товаров: <span id="total-items">{{ user.shopping_cart.items.count }}</span></p>
+                        <p>Товаров: <span id="total-items">{{ cart_items_count }}</span></p>
                         <div class="total-price">
                             <h5>Итого</h5>
-                            <p class="price fw-bold"><span id="total-price">{{ user.shopping_cart.get_total_price|floatformat:0 }}</span> р.</p>
+                            <p class="price fw-bold"><span id="total-price">{{ total_price|floatformat:0 }}</span> р.</p>
                         </div>
                         <a href="#" class="custom-btn-checkout w-100 mt-4">Оформить заказ</a>
                     </div>

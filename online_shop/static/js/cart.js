@@ -53,7 +53,7 @@ $(document).ready(function() {
             success: function(data) {
                 if (button) {
                     if (quantity > 0) {
-                        button.text('Удалить из корзины');
+                        button.text('Удалить');
                         button.data('action', 'remove');
                         button.removeClass('btn-danger').addClass('btn-secondary');
                     } else {
@@ -66,9 +66,11 @@ $(document).ready(function() {
                 $('#total-items').text(data.total_items);
                 $('#total-price').text(data.total_price);
 
-                if (quantity === 0) {
-                    $(`[data-product-id="${productId}"]`).remove();
-                } else {
+                if (quantity === 0 && button) {
+                    button.text('В корзину');
+                    button.data('action', 'add');
+                    button.removeClass('btn-secondary').addClass('btn-danger');
+                } else if (button) {
                     const cartItem = $(`[data-product-id="${productId}"]`);
                     cartItem.find('.item-quantity').val(data.item_quantity);
                     const itemPrice = parseFloat(cartItem.find('.custom-cart-item-price').data('price'));

@@ -55,7 +55,7 @@
                             <span class="badge bg-success">-33%</span><br>
                             <span class="fw-bold text-primary">{{ product.price|floatformat:0|intcomma }} р.</span>
                         </div>
-                        {% if product.is_in_cart %}
+                        {% if product in is_in_cart %}
                             <button class="btn btn-secondary btn-sm add-to-cart-btn" data-product-id="{{ product.id }}" data-action="remove">
                                 Удалить
                             </button>

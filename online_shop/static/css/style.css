@@ -1226,6 +1226,12 @@ figure.photo.hover:before {
     padding-left: 10px;
     margin-bottom: 5px;
 }
+
+.header {
+    font-size: 24px;
+    color: #141414;
+    font-weight: 600;
+}
 /* Уменьшение размера иконок и текста */
 .nav-item .nav-link {
     font-size: 12px; /* Уменьшаем размер текста под иконками */

@@ -1,5 +1,5 @@
 <button class="favorite-button" data-product-number="{{ product.article_number }}" class="btn btn-primary">
-    {% if product.is_favorite %}
+    {% if product in is_favorites %}
         <i class="fas fa-heart"></i>  <!-- заполненное сердце -->
     {% else %}
         <i class="far fa-heart"></i>  <!-- пустое сердце -->

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
@@ -169,7 +170,7 @@ class ShoppingCart(models.Model):
 
     def get_total_price(self):
         """Возвращает общую сумму товаров в корзине"""
-        return sum(item.get_total_price() for item in self.items.all())
+        return self.items.aggregate(total_price=Sum('product__price'))['total_price'] or 0
 
 
 class CartItem(models.Model):

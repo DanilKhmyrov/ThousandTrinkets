@@ -98,3 +98,10 @@ class UserShoppingCartView(DetailView):
 
     def get_object(self):
         return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['cart_items'] = self.object.shopping_cart.items.select_related(
+            'product', 'product__category').all()
+        context['total_price'] = self.object.shopping_cart.get_total_price()
+        return context
