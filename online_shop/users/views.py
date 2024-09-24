@@ -77,7 +77,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class UserFavoriteView(DetailView):
+class UserFavoriteView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'store/user/favorite.html'
     context_object_name = 'user'
@@ -92,7 +92,7 @@ class UserFavoriteView(DetailView):
         return context
 
 
-class UserShoppingCartView(DetailView):
+class UserShoppingCartView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'store/user/shopping_cart.html'
 

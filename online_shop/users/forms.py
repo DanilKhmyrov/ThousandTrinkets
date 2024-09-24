@@ -1,6 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
+from store.models import ShoppingCart
+
 
 class RegistrationUserForm(UserCreationForm):
 
@@ -20,4 +22,5 @@ class RegistrationUserForm(UserCreationForm):
         user.phone_number = self.cleaned_data['phone_number']
         if commit:
             user.save()
+            ShoppingCart.objects.create(user=user)
         return user
