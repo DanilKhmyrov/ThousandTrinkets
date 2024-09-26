@@ -42,9 +42,9 @@ services:
       dockerfile: ./online_shop/Dockerfile
     env_file: .env
     volumes:
-    - ./online_shop:/app
-    - static:/backend_static
-    - media:/app/media
+      - ./online_shop:/app
+      - static:/backend_static
+      - media:/app/media
     depends_on:
       db:
         condition: service_healthy
@@ -64,8 +64,10 @@ services:
       context: ./
       dockerfile: ./online_shop/Dockerfile
     command: celery -A online_shop worker --loglevel=info
+    restart: always
     env_file: .env
     volumes:
+      - ./online_shop:/app
       - static:/backend_static
       - media:/app/media
     depends_on:

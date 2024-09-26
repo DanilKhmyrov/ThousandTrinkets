@@ -1,7 +1,7 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView, ListView
-from django.db.models import Q, Prefetch, Exists, OuterRef
+from django.db.models import Q, Exists, OuterRef
 
 from .models import CartItem, Product, Category, MainCategory
 
@@ -56,7 +56,6 @@ class SearchResultsView(ListView):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get('query', '')
         context['query'] = query
-        # Подсчитываем общее количество результатов
         if query:
             total_results = Product.objects.filter(
                 Q(name__icontains=query) | Q(article_number__icontains=query)
@@ -102,7 +101,6 @@ class MainCategoryListView(ListView):
     pk_url_kwarg = 'main_category_slug'
 
     def get_queryset(self):
-        # Получаем все категории, принадлежащие данной главной категории
         return MainCategory.objects.prefetch_related('categories').all()
 
     def get_context_data(self, **kwargs):

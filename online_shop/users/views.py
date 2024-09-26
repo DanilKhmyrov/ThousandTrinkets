@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
-from store.models import Product, CartItem
+from store.models import Product, CartItem, ShoppingCart
 from .utils import get_product_count_text
 
 User = get_user_model()
@@ -23,9 +23,10 @@ def update_cart(request):
         quantity = int(quantity)
     except ValueError:
         return JsonResponse({'error': 'Некорректное количество'}, status=400)
-
+    # FIXME: настроить user.is_authenticated
     user = request.user
-    cart = user.shopping_cart
+
+    cart, created = ShoppingCart.objects.get_or_create(user=user)
 
     try:
         product = Product.objects.get(id=product_id)
@@ -73,7 +74,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         context['products'] = get_product_count_text(user.favorites.count())
         context['cart_items_count'] = get_product_count_text(
-            user.shopping_cart.items.count())
+            CartItem.objects.filter(cart=user.shopping_cart.get()).count())
         return context
 
 
@@ -101,7 +102,8 @@ class UserShoppingCartView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['cart_items'] = self.object.shopping_cart.items.select_related(
-            'product', 'product__category').all()
-        context['total_price'] = self.object.shopping_cart.get_total_price()
+        shopping_cart = self.object.shopping_cart.get()
+        context['cart_items'] = CartItem.objects.filter(
+            cart=shopping_cart).select_related('product')
+        context['total_price'] = shopping_cart.get_total_price()
         return context

@@ -1,3 +1,4 @@
+import socket
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -15,13 +16,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') + ['192.168.0.109']
-
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
 INTERNAL_IPS = [
     'localhost',
     '127.0.0.1',
     '0.0.0.0'
-]
+] + [ip[:ip.rfind(".")] + ".1" for ip in ips]
 
 INSTALLED_APPS = [
     'jazzmin',
@@ -150,3 +151,4 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'rpc://'
 CELERY_RESULT_SERIALIZER = 'json'
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

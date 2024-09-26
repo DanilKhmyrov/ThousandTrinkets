@@ -1,4 +1,4 @@
-from store.models import MainCategory
+from store.models import CartItem, MainCategory, ShoppingCart
 
 
 def main_categories(request):
@@ -11,13 +11,25 @@ def main_categories(request):
 
 def favorites_and_cart_count(request):
     if request.user.is_authenticated:
-        cart_items = request.user.shopping_cart.items.select_related('product').all()
-        favorites_items = request.user.favorites.select_related('category').all()
+        try:
+            shopping_cart = request.user.shopping_cart.get()
+        except ShoppingCart.DoesNotExist:
+            shopping_cart = None
 
-        is_in_cart = [item.product for item in cart_items]
+        if shopping_cart:
+            cart_items = CartItem.objects.filter(
+                cart=shopping_cart).select_related('product')
+            is_in_cart = [item.product for item in cart_items]
+            cart_items_count = len(is_in_cart)
+        else:
+            is_in_cart = []
+            cart_items_count = 0
+
+        favorites_items = request.user.favorites.select_related(
+            'category').all()
         is_favorites = [fav for fav in favorites_items]
-        cart_items_count = len(is_in_cart)
         favorites_count = len(is_favorites)
+
     else:
         favorites_count = 0
         cart_items_count = 0
