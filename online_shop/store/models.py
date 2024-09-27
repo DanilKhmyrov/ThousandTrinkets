@@ -233,9 +233,13 @@ class Order(AbstractCart):
     )
     status = models.CharField(
         max_length=20, choices=[
-            ('pending', 'Ожидает'),
-            ('confirmed', 'Подтвержден')
-        ], default='pending')
+            ('awaiting_delivery', 'Ожидает вручения'),
+            ('assembling', 'В сборке'),
+            ('confirmed', 'Подтвержден'),
+            ('received', 'Получен'),
+            ('canceled', 'Отменен'),
+            ('returned', 'Возвращен')
+        ], default='confirmed')
 
     def __str__(self):
         return f'Заказ пользователя {self.user.username}'
@@ -260,59 +264,3 @@ class OrderItem(AbstractCartItem):
         ordering = ('id',)
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
-
-
-# class ShoppingCart(models.Model):
-#     user = models.OneToOneField(
-#         User,
-#         on_delete=models.CASCADE,
-#         related_name='shopping_cart',
-#         verbose_name='Пользователь')
-#     products = models.ManyToManyField(
-#         Product,
-#         through='CartItem')
-#     created_at = models.DateTimeField(
-#         'Создана',
-#         auto_now_add=True)
-#     updated_at = models.DateTimeField(
-#         'Обновлено',
-#         auto_now_add=True)
-
-#     def __str__(self):
-#         return f'Корзина {self.user.username}'
-
-#     class Meta:
-#         ordering = ('id',)
-#         verbose_name = 'Корзина'
-#         verbose_name_plural = 'Корзины'
-
-#     def get_total_price(self):
-#         """Возвращает общую сумму товаров в корзине"""
-#         return self.items.aggregate(total_price=Sum('product__price'))['total_price'] or 0
-
-
-# class CartItem(models.Model):
-#     cart = models.ForeignKey(
-#         ShoppingCart,
-#         on_delete=models.CASCADE,
-#         related_name='items',
-#         verbose_name='Корзина')
-#     product = models.ForeignKey(
-#         Product,
-#         on_delete=models.CASCADE,
-#         verbose_name='Товар')
-#     quantity = models.PositiveIntegerField(
-#         'Колличество',
-#         default=1)
-
-#     def __str__(self):
-#         return f'{self.product.name} в количестве {self.quantity}'
-
-#     class Meta:
-#         ordering = ('id',)
-#         verbose_name = 'Товар'
-#         verbose_name_plural = 'Товары'
-
-#     def get_total_price(self):
-#         """Возвращает общую стоимость для данного товара в корзине"""
-#         return self.product.price * self.quantity

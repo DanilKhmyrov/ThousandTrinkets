@@ -1,0 +1,54 @@
+<div class="col-md-2">
+    <div class="profile-sidebar">
+        {% with request.resolver_match.view_name as view_name %}
+        <a href="{% url 'user:profile' %}" class="profile-menu-item-link {% if view_name == 'user:profile' %}active{% endif %}">
+            Мой кабинет
+        </a>
+        <!-- Секция покупок -->
+        <div class="profile-section-title">Покупки</div>
+        <a href="{% url 'user:order_confirmation' %}" class="profile-menu-item-link {% if view_name == 'user:order_confirmation' %}active{% endif %}">
+            Мои заказы
+        </a>
+        <a href="#" class="profile-menu-item-link">
+            История покупок
+        </a>
+        <!-- Секция профиля -->
+        <div class="profile-section-title">Профиль</div>
+        <a href="#" class="profile-menu-item-link">
+            Мои отзывы и вопросы
+        </a>
+        <a href="#" class="profile-menu-item-link">
+            Промокоды
+        </a>
+        <a href="#" class="profile-menu-item-link">
+            Личные данные
+        </a>
+        <a href="#" class="profile-menu-item-link">
+            Мои организации
+        </a>
+        <!-- Секция товаров -->
+        <div class="profile-section-title">Товары</div>
+        <a href="{% url 'user:shopping-cart' %}" class="profile-menu-item-link">
+            Корзина
+        </a>
+        <a href="{% url 'user:favorites' %}" class="profile-menu-item-link">
+            Избранное 
+            <span class="badge rounded-pill bg-success">{{ favorites_count }}</span>
+        </a>
+        <a href="#" class="profile-menu-item-link">
+            Просмотренные товары
+        </a>
+        <a href="#" class="profile-menu-item-link">
+            Сравнение
+        </a>
+        <!-- Секция сервиса и поддержки -->
+        <div class="profile-section-title">Сервис и поддержка</div>
+        <a href="#" class="profile-menu-item-link">
+            Обмен, возврат и ремонт
+        </a>
+        <a href="#" class="profile-menu-item-link">
+            Помощь по работе с сайтом
+        </a>
+        {% endwith %}
+    </div>
+</div>

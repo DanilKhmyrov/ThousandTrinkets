@@ -59,7 +59,7 @@
 
                     <!-- Заказы -->
                     <li class="nav-item position-relative">
-                        <a class="nav-link d-flex flex-column align-items-center" href="#">
+                        <a class="nav-link d-flex flex-column align-items-center" href="{% url 'user:order_confirmation' %}">
                             <i class="fas fa-box fa-2x"></i>
                             <span>Заказы</span>
                         </a>
@@ -70,7 +70,6 @@
                         <a class="nav-link d-flex flex-column align-items-center" href="{% url 'user:shopping-cart' %}">
                             <i class="fas fa-shopping-cart fa-2x"></i>
                             <span>Корзина</span>
-                            <!-- Бейдж с количеством товаров в корзине -->
                             <span class="badge rounded-pill position-absolute">
                                 {% if user.is_authenticated %}
                                     {{ cart_items_count }}

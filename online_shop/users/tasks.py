@@ -1,5 +1,6 @@
 from celery import shared_task
-from .models import Order, ShoppingCart, OrderItem
+
+from store.models import Order, OrderItem, ShoppingCart
 
 
 @shared_task

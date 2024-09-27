@@ -1,15 +1,27 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.http import JsonResponse
+from django.db import transaction
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
-from store.models import Product, CartItem, ShoppingCart
+from .tasks import create_order_task
+from store.models import Order, Product, CartItem, ShoppingCart
 from .utils import get_product_count_text
 
 User = get_user_model()
+
+
+@login_required
+@require_POST
+# TODO: Добавить уведомление о новом заказе в админ панели
+def checkout(request):
+    user = request.user
+    with transaction.atomic():
+        transaction.on_commit(lambda: create_order_task.delay(user.id))
+    return redirect('user:order_confirmation')
 
 
 @login_required
@@ -24,6 +36,7 @@ def update_cart(request):
     except ValueError:
         return JsonResponse({'error': 'Некорректное количество'}, status=400)
     # FIXME: настроить user.is_authenticated
+    # FIXME: проверить почему не обновляется поле updated_at
     user = request.user
 
     cart, created = ShoppingCart.objects.get_or_create(user=user)
@@ -67,7 +80,7 @@ def toggle_favorite(request, article):
 
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
-    template_name = 'store/user/profile.html'
+    template_name = 'store/user/profile_home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -107,3 +120,18 @@ class UserShoppingCartView(LoginRequiredMixin, DetailView):
             cart=shopping_cart).select_related('product')
         context['total_price'] = shopping_cart.get_total_price()
         return context
+
+
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'store/user/order_list.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        user = self.request.user
+        return (
+            Order.objects.filter(user=user)
+            .prefetch_related('items__product')
+            .prefetch_related('items__product__category')
+            .select_related('user')
+        )

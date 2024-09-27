@@ -1275,3 +1275,134 @@ figure.photo.hover:before {
 .add-to-cart {
     width: 50%;
 }
+
+.profile-menu-item-link.active {
+    font-weight: bold;
+    color: #d40f0f;
+}
+
+.order-list-container {
+    width: 100%;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-card {
+    background-color: #f9f9f9;
+    border: 1pt solid #a2a2a279;
+    border-radius: 16px;
+    padding: 15px;
+    width: 100%;
+}
+/* Цветовые блоки для статусов заказов */
+.order-card.awaiting_delivery {
+    border-left: 4px solid #ffcc00;
+    background-color: #fff9e6;
+}
+
+.order-card.assembling {
+    border-left: 4px solid #00bcd4;
+    background-color: #e0f7fa;
+}
+
+.order-card.received{
+    border-left: 4px solid #4caf50;
+    background-color: #e8f5e9;
+}
+
+.order-card.confirmed {
+    border-left: 4px solid #5ce640;
+    background-color: #edffe1;
+}
+
+.order-card.canceled {
+    border-left: 4px solid #f44336;
+    background-color: #ffebee;
+}
+
+.order-card.returned {
+    border-left: 4px solid #ff5722;
+    background-color: #fbe9e7;
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.order-header h5 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #333;
+}
+
+.order-header .order-status {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.order-body {
+    margin-top: 10px;
+}
+
+.order-items {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.order-items li {
+    padding: 5px 0;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex; /* Добавлено для inline изображения */
+    align-items: center;
+}
+
+.order-items li:last-child {
+    border-bottom: none;
+}
+
+/* Стиль для изображения товара */
+.order-item-image {
+    margin-right: 10px;
+}
+
+.order-item-image img {
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+}
+
+.order-total {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .order-card {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-header h5 {
+        font-size: 1rem;
+    }
+
+    .order-items li {
+        font-size: 0.9rem;
+    }
+}

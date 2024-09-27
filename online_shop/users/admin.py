@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.db.models.query import QuerySet
 from django.http import HttpRequest
 
 User = get_user_model()

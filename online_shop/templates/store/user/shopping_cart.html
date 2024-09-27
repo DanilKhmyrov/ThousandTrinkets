@@ -87,7 +87,10 @@
                             <h5>Итого</h5>
                             <p class="price fw-bold"><span id="total-price">{{ total_price|floatformat:0 }}</span> р.</p>
                         </div>
-                        <a href="#" class="custom-btn-checkout w-100 mt-4">Оформить заказ</a>
+                        <form method="POST" action="{% url 'user:order_checkout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="custom-btn-checkout w-100 mt-4">Оформить заказ</button>
+                        </form>
                     </div>
                 </div>
             </div>

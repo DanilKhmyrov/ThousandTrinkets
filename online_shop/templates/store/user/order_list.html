@@ -1,0 +1,43 @@
+{% extends 'store/user/profile_base.html' %}
+
+{% block profile_content %}
+<div class="order-list-container">
+    <h4 class="full-width-title">Мои заказы</h4>
+    
+    {% if orders %}
+    <div class="order-list">
+        {% for order in orders %}
+        <div class="order-card {{ order.status }}">
+            <div class="order-header">
+                <h5>Заказ №{{ order.id }} от {{ order.created_at|date:"d.m.Y" }}</h5>
+                <span class="order-status">{{ order.get_status_display }}</span>
+            </div>
+            <div class="order-body">
+                <ul class="order-items">
+                    {% for item in order.items.all %}
+                    <li class="order-item">
+                        <div class="order-item-image">
+                            {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="40" height="40">
+                            {% else %}
+                                <img src="https://via.placeholder.com/40" alt="Нет изображения" width="40" height="40">
+                            {% endif %}
+                        </div>
+                        <div class="order-item-info">
+                            <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a> — {{ item.quantity }} шт.
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="order-total">
+                    Общая стоимость: {{ order.get_total_price }} ₽
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>У вас пока нет заказов.</p>
+    {% endif %}
+</div>
+{% endblock %}
