@@ -1,13 +1,16 @@
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
 from store.models import ShoppingCart
 
+User = get_user_model()
+
 
 class RegistrationUserForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
-        model = get_user_model()
+        model = User
         fields = UserCreationForm.Meta.fields + ('email', 'phone_number')
 
     def __init__(self, *args, **kwargs):
@@ -24,3 +27,17 @@ class RegistrationUserForm(UserCreationForm):
             user.save()
             ShoppingCart.objects.create(user=user)
         return user
+
+
+class UserProfileForm(forms.ModelForm):
+    birthdate = forms.DateField(
+        widget=forms.DateInput(
+            attrs={'class': 'form-control custom-input', 'type': 'date'}),
+        label='День рождения',
+        input_formats=['%d-%m-%Y']
+    )
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email',
+                  'username', 'birthdate', 'phone_number',)

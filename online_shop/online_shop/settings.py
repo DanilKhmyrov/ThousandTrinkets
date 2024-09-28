@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 
     'django_bootstrap5',
     'django_bootstrap_icons',
+    'widget_tweaks',
 
     'store.apps.StoreConfig',
     'pages.apps.PagesConfig',

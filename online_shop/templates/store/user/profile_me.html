@@ -1,0 +1,67 @@
+{% extends 'store/user/profile_base.html' %}
+{% load widget_tweaks %}
+{% block profile_content %}
+<div class="order-list-container">
+<form method="post" action="{% url 'user:me' %}">
+    {% csrf_token %}
+    
+    <!-- Username, First Name, Last Name -->
+    <div class="row" style="justify-content: space-between;">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="custom-label" for="username">Имя пользователя</label>
+                {{ form.username|add_class:"form-control custom-input" }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="custom-label" for="first_name">Имя</label>
+                {{ form.first_name|add_class:"form-control custom-input" }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="custom-label" for="last_name">Фамилия</label>
+                {{ form.last_name|add_class:"form-control custom-input" }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group mb-4 ">
+                <label class="custom-label" for="email">Электронная почта</label>
+                {{ form.email|add_class:"form-control custom-input" }}
+            </div>
+        </div>
+    <!-- Номер телефона -->
+        <div class="col-md-6">
+            <div class="form-group mb-4">
+                <label class="custom-label" for="phone_number">Номер телефона</label>
+                {{ form.phone_number|add_class:"form-control custom-input" }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group mb-4">
+        <label class="custom-label" for="birthdate">День рождения</label>
+        {{ form.birthdate|add_class:"form-control custom-input" }}
+    </div>
+    <!-- Пароль -->
+    <div class="form-group mb-4">
+        <label class="custom-label" for="password">Пароль</label>
+        {{ form.password|add_class:"form-control custom-input" }}
+    </div>
+
+    <!-- Подтверждение пароля -->
+    <div class="form-group mb-4">
+        <label class="custom-label" for="password_confirm">Подтвердите пароль</label>
+        {{ form.password_confirm|add_class:"form-control custom-input" }}
+    </div>
+
+    <!-- Кнопка сохранения -->
+    <div class="form-actions">
+        <button type="submit" class="custom-btn">Сохранить изменения</button>
+        <a href="{% url 'user:profile' %}" class="custom-btn secondary">Отменить</a>
+    </div>
+</form>
+</div>
+{% endblock %}

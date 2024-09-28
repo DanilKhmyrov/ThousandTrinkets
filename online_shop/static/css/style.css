@@ -1406,3 +1406,61 @@ figure.photo.hover:before {
         font-size: 0.9rem;
     }
 }
+/* Основные стили для формы */
+.custom-input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #a2a2a279;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s ease-in-out;
+    box-sizing: border-box;
+}
+
+.custom-input:focus {
+    border-color: #d40f0f;
+    outline: none;
+    box-shadow: 0 0 5px rgba(212, 15, 15, 0.5);
+}
+
+.custom-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    display: inline-block;
+    background-color: white;
+    position: relative;
+    top: 18px;
+    left: 10px;
+    padding: 0px 10px;
+    z-index: 1;
+}
+
+
+/* Стиль для кнопок */
+.custom-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.custom-btn.secondary {
+    background-color: #6c757d;
+    color: white;
+    margin-left: 10px;
+}
+
+.custom-btn:hover {
+    background-color: #0056b3;
+}
+
+.custom-btn.secondary:hover {
+    background-color: #5a6268;
+}

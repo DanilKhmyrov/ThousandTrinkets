@@ -1,12 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, DetailView, ListView, UpdateView
 from django.http import JsonResponse
 from django.db import transaction
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 
+from .forms import UserProfileForm
 from .tasks import create_order_task
 from store.models import Order, Product, CartItem, ShoppingCart
 from .utils import get_product_count_text
@@ -91,6 +93,16 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         return context
 
 
+class UserProfileMeView(LoginRequiredMixin, UpdateView):
+    model = User
+    template_name = 'store/user/profile_me.html'
+    form_class = UserProfileForm
+    success_url = reverse_lazy('user:profile')
+
+    def get_object(self):
+        return self.request.user
+
+
 class UserFavoriteView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'store/user/favorite.html'
@@ -122,7 +134,7 @@ class UserShoppingCartView(LoginRequiredMixin, DetailView):
         return context
 
 
-class OrderListView(LoginRequiredMixin, ListView):
+class UserOrderListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'store/user/order_list.html'
     context_object_name = 'orders'
