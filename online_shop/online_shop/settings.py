@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from pathlib import Path
 
-from admin_panel.jazzmin_settings import JAZZMIN_SETTINGS
+from admin_panel.jazzmin_settings import JAZZMIN_SETTINGS  # noqa
 
 load_dotenv()
 
@@ -15,7 +15,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') + ['192.168.0.109']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',') + ['192.168.0.28']
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 
 INTERNAL_IPS = [

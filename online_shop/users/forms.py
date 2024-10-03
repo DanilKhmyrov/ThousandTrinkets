@@ -34,10 +34,17 @@ class UserProfileForm(forms.ModelForm):
         widget=forms.DateInput(
             attrs={'class': 'form-control custom-input', 'type': 'date'}),
         label='День рождения',
-        input_formats=['%d-%m-%Y']
+        input_formats=['%d-%m-%Y'],
+        required=False
     )
 
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email',
                   'username', 'birthdate', 'phone_number',)
+        help_texts = {
+            'username': 'Имя пользователя должно быть уникальным.',
+            'first_name': 'пися.',
+            'last_name': 'попа.',
+            'phone_number': '123'
+        }

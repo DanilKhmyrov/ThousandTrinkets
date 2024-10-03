@@ -2,6 +2,7 @@
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #f4f5f6;
+    margin-bottom: 70px;
 }
 
 /* Branding */
@@ -591,15 +592,6 @@ figure.photo.hover:before {
     border-radius: 20px; /* Закруглённые углы */
 }
 
-/* Style input group to ensure proper alignment */
-.input-group {
-    display: flex;
-    align-items: center;
-    border-radius: 8px; /* Rounded corners */
-    overflow: hidden; /* Ensure elements don't overflow */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for aesthetics */
-}
-
 /* Style the search input */
 .form-control {
     border: none;
@@ -625,94 +617,6 @@ figure.photo.hover:before {
     width: 100%; /* Занимает всю ширину контейнера */
 }
 
-.input-group {
-    width: 100%;
-    display: flex; /* Используем Flexbox для выравнивания кнопки и поля ввода */
-    align-items: center; /* Выравнивает элементы по центру по вертикали */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для поля поиска */
-    border-radius: 20px; /* Закругленные углы */
-    overflow: hidden; /* Скрывает части элементов, выходящие за границы */
-}
-
-.input-group .form-control {
-    border: none;
-    padding: 10px;
-    height: 45px;
-    box-shadow: none; /* Убираем тень у самого поля ввода */
-    flex-grow: 1; /* Заставляет поле ввода занимать все доступное пространство */
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-}
-
-.input-group .btn-primary {
-    background-color: #007bff;
-    border: none;
-    padding: 10px 15px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
-}
-
-.input-group .btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.suggestions-list li {
-    display: flex;
-    align-items: center;
-    padding: 8px 0;
-    transition: background-color 0.3s;
-    border-bottom: 1px solid #eee;
-}
-
-.suggestions-list li:last-child {
-    border-bottom: none;
-}
-
-.suggestions-list li:hover {
-    background-color: #f8f9fa;
-}
-
-.suggestions-list img {
-    width: 40px;
-    height: 40px;
-    margin-right: 15px;
-    border-radius: 20%;
-    object-fit: cover;
-}
-
-.suggestions-list a {
-    color: #333;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.suggestions-list .product-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.suggestions-list .product-name {
-    font-weight: bold;
-}
-
-.suggestions-list .category-name {
-    font-size: 12px;
-    color: #888;
-}
-
-.suggestions-list .product-price {
-    font-size: 18px;
-    color: #0015ff;
-    margin-top: 5px;
-    margin-bottom: 0;
-}
 /* Container for the nav items */
 .container-nav {
     display: flex;
@@ -743,14 +647,16 @@ figure.photo.hover:before {
     max-width: 800px;
 }
 
-.input-group {
+.nav-input-group {
     width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
 }
 
-.input-group .form-control {
+.nav-input-group .form-control {
     border: none;
     padding: 10px;
     height: 45px;
@@ -760,7 +666,7 @@ figure.photo.hover:before {
     border-bottom-left-radius: 20px;
 }
 
-.input-group .btn-primary {
+.nav-input-group .btn-primary {
     background-color: #484F55;
     border: none;
     padding: 10px 15px;
@@ -772,7 +678,7 @@ figure.photo.hover:before {
     border-bottom-right-radius: 20px;
 }
 
-.input-group .btn-primary:hover {
+.nav-input-group .btn-primary:hover {
     background-color: #0056b3;
 }
 
@@ -831,7 +737,7 @@ figure.photo.hover:before {
     color: #888;
 }
 
-.suggestions-list .product-price {
+.suggestions-list .nav-product-price {
     font-size: 14px;
     color: #007bff;
     margin-top: 5px;
@@ -1464,3 +1370,53 @@ figure.photo.hover:before {
 .custom-btn.secondary:hover {
     background-color: #5a6268;
 }
+
+/* Стили для мобильной навигации внизу */
+.mobile-nav-bar {
+    padding: 10px 0;
+}
+
+.mobile-nav-bar .col a {
+    text-decoration: none;
+    color: #333;
+}
+
+.search-container-mobile {
+    padding: 10px;
+}
+
+/* Adjust the icon size to make it smaller */
+
+/* Adjust the label size */
+.nav-label {
+    font-size: 0.8rem; /* Smaller text */
+}
+
+/* Ensure the padding and margins are reduced */
+.mobile-nav-bar a {
+    padding: 5px 0; /* Reduce padding */
+}
+
+/* Ensure columns align well with smaller icons */
+.mobile-nav-bar .col {
+    padding: 0;
+}
+
+/* Make the mobile navigation bar height slightly smaller */
+.mobile-nav-bar {
+    padding: 10px 0;
+}
+
+#suggestions-mobile {
+    margin-top: 5px;
+    width: 96%;
+}
+
+.trailing.clear {
+    cursor: pointer;
+  
+    &:focus {
+      color: #3b71ca;
+      outline: none;
+    }
+  }

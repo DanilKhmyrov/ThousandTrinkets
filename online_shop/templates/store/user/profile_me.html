@@ -1,28 +1,41 @@
 {% extends 'store/user/profile_base.html' %}
 {% load widget_tweaks %}
+{% load django_bootstrap5 %}
 {% block profile_content %}
 <div class="order-list-container">
 <form method="post" action="{% url 'user:me' %}">
     {% csrf_token %}
-    
     <!-- Username, First Name, Last Name -->
     <div class="row" style="justify-content: space-between;">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label class="custom-label" for="username">Имя пользователя</label>
-                {{ form.username|add_class:"form-control custom-input" }}
+        <div class="input-group mb-5">
+            <div class="form-outline" data-mdb-input-init>
+                <i class="fas fa-exclamation-circle trailing"></i>
+                {{ form.username|add_class:"form-control"|attr:"data-mdb-showcounter:true" |attr:"maxlength:30" }}
+                <label class="form-label" for="username">Имя пользователя</label>
+                <div class="form-helper"></div>
+                {% if form.username.help_text %}
+                    <div class="form-helper">{{ form.username.help_text }}</div>
+                {% endif %}
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label class="custom-label" for="first_name">Имя</label>
-                {{ form.first_name|add_class:"form-control custom-input" }}
+        <div class="input-group mb-5">
+            <div class="form-outline" data-mdb-input-init>
+                {{ form.first_name|add_class:"form-control"|attr:"data-mdb-showcounter:true" |attr:"maxlength:30" }}
+                <label class="form-label" for="first_name">Имя</label>
+                <div class="form-helper"></div>
+                {% if form.first_name.help_text %}
+                    <div class="form-helper">{{ form.first_name.help_text }}</div>
+                {% endif %}
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label class="custom-label" for="last_name">Фамилия</label>
-                {{ form.last_name|add_class:"form-control custom-input" }}
+        <div class="input-group mb-5">
+            <div class="form-outline" data-mdb-input-init>
+                {{ form.last_name|add_class:"form-control"|attr:"data-mdb-showcounter:true" |attr:"maxlength:30" }}
+                <label class="form-label" for="last_name">Фамилия</label>
+                <div class="form-helper"></div>
+                {% if form.last_name.help_text %}
+                    <div class="form-helper">{{ form.last_name.help_text }}</div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -35,33 +48,46 @@
         </div>
     <!-- Номер телефона -->
         <div class="col-md-6">
-            <div class="form-group mb-4">
-                <label class="custom-label" for="phone_number">Номер телефона</label>
-                {{ form.phone_number|add_class:"form-control custom-input" }}
+            <div class="input-group mb-5">
+                <div class="form-outline" data-mdb-input-init>
+                    {{ form.phone_number|add_class:"form-control" }}
+                    <label class="form-label" for="phone_number">Номер телефона</label>
+                    <div class="form-helper"></div>
+                    {% if form.phone_number.help_text %}
+                        <div class="form-helper">{{ form.phone_number.help_text }}</div>
+                    {% endif %}
             </div>
         </div>
     </div>
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+        {% for field, errors in form.errors.items %}
+            <li><strong>{{ field }}:</strong>
+                <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
     <div class="form-group mb-4">
         <label class="custom-label" for="birthdate">День рождения</label>
         {{ form.birthdate|add_class:"form-control custom-input" }}
     </div>
-    <!-- Пароль -->
-    <div class="form-group mb-4">
-        <label class="custom-label" for="password">Пароль</label>
-        {{ form.password|add_class:"form-control custom-input" }}
-    </div>
-
-    <!-- Подтверждение пароля -->
-    <div class="form-group mb-4">
-        <label class="custom-label" for="password_confirm">Подтвердите пароль</label>
-        {{ form.password_confirm|add_class:"form-control custom-input" }}
-    </div>
-
-    <!-- Кнопка сохранения -->
     <div class="form-actions">
         <button type="submit" class="custom-btn">Сохранить изменения</button>
         <a href="{% url 'user:profile' %}" class="custom-btn secondary">Отменить</a>
     </div>
-</form>
 </div>
 {% endblock %}
+{% block extra_js %}
+    <script>
+        import { Input, initMDB } from "mdb-ui-kit";
+
+        initMDB({ Input });
+    </script>
+{% endblock extra_js %}

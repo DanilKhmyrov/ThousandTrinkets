@@ -1,4 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView, ListView, UpdateView
@@ -101,6 +104,20 @@ class UserProfileMeView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
+
+    def post(self, request, *args, **kwargs):
+        super().post(request, *args, **kwargs)
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+
+        return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        # В случае ошибки, выводим уведомление об ошибке
+        messages.error(self.request, 'Пожалуйста, исправьте ошибки в форме.')
+        return super().form_invalid(form)
 
 
 class UserFavoriteView(LoginRequiredMixin, DetailView):
