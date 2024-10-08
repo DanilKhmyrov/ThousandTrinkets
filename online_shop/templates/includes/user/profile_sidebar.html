@@ -1,4 +1,4 @@
-<div class="col-md-2">
+
     <div class="profile-sidebar">
         {% with request.resolver_match.view_name as view_name %}
         <a href="{% url 'user:profile' %}" class="profile-menu-item-link {% if view_name == 'user:profile' %}active{% endif %}">
@@ -51,4 +51,4 @@
         </a>
         {% endwith %}
     </div>
-</div>
+

@@ -292,11 +292,17 @@ a.nav-menu-item {
 }
 
 .product-image {
-    object-fit: cover;
+    object-fit: scale-down;
     overflow: hidden;
     max-width: 100%;
-    max-height: 100%;
+    max-height: 250px;
     border-radius: 10px;
+}
+
+@media (max-width: 992px) {
+    .product-image {
+        max-height: 150px;
+    }
 }
 
 .product-title {
@@ -380,12 +386,6 @@ a.nav-menu-item {
 }
 
 
-.col-md-4 {
-    border-radius: 20px; /* Закругленные углы для контейнера */
-    overflow: hidden;
-    padding: 10px; /* Отступы внутри элемента */
-}
-
 figure.photo {
     font-family: 'Raleway', Arial, sans-serif;
     position: relative;
@@ -432,11 +432,6 @@ figure.photo img {
         flex-wrap: wrap;
         justify-content: center;
         gap: 20px; /* Расстояние между карточками */
-    }
-
-    .col-md-4 {
-        flex: 0 0 calc(33.333% - 20px); /* 33.333% ширины */
-        max-width: calc(33.333% - 20px); /* Фиксированная ширина */
     }
 }
 
@@ -888,25 +883,42 @@ figure.photo.hover:before {
 .profile-card-container {
     background-color: #fff;
     display: flex;
-    justify-content: space-evenly; /* Распределить карточки равномерно */
-    flex-wrap: wrap; /* Если карточек слишком много, они перейдут на следующую строку */
-    gap: 25px; /* Отступы между карточками */
-    border-radius: 12px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 25px;
+    border-radius: 0 0 12px 12px;
     padding: 20px;
 }
 
+@media (max-width: 992px) {
+    .profile-card-container {
+        flex-wrap: nowrap;  /* Отключаем перенос для мобильных устройств */
+        overflow-x: scroll;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;  /* Прокрутка с "привязкой" элементов */
+        gap: 15px; /* Уменьшаем промежутки между карточками */
+        padding: 10px; /* Уменьшаем внутренние отступы */
+    }
+
+    .profile-card {
+        scroll-snap-align: start; /* Привязка к началу */
+    }
+}
 
 .full-width-title {
-    flex-basis: 100%; /* Заголовок занимает всю ширину контейнера */
-    text-align: left; /* Выравниваем текст по левому краю */
-    margin-bottom: 15px;
+    padding: 10px 0 0 10px;
+    flex-basis: 100%;
+    text-align: left;
+    margin-bottom: 0px;
+    background-color: white;
+    border-radius: 12px 12px 0 0;
 }
 
 
 .profile-card {
-    flex: 1; /* Карточки будут равномерно растягиваться */
-    min-width: 200px; /* Минимальная ширина карточки */
-    max-width: 220px; /* Максимальная ширина карточки */
+    flex: 1;
+    min-width: 200px; 
+    max-width: 220px; 
     background-color: #ffffff;
     border: 1pt solid #a2a2a279;
     border-radius: 16px;
@@ -1036,10 +1048,27 @@ figure.photo.hover:before {
 }
 
 .custom-cart-item-img {
+    padding: 0 10px;
     border-radius: 4px;
+    object-fit: scale-down;
+    width: 100px;
+    height: auto;
+}
+
+@media (max-width: 992px) {
+    .custom-cart-item-body {
+        padding: 0px;
+    }
+    
+    .custom-cart-item-img {
+        width: 100px;
+        height: 100px;
+    }
 }
 
 .custom-cart-item-name {
+    word-break: break-all;
+    overflow-wrap: break-word;
     font-size: 16px;
     font-weight: bold;
 }
@@ -1385,24 +1414,18 @@ figure.photo.hover:before {
     padding: 10px;
 }
 
-/* Adjust the icon size to make it smaller */
-
-/* Adjust the label size */
 .nav-label {
-    font-size: 0.8rem; /* Smaller text */
+    font-size: 0.8rem;
 }
 
-/* Ensure the padding and margins are reduced */
 .mobile-nav-bar a {
-    padding: 5px 0; /* Reduce padding */
+    padding: 5px 0;
 }
 
-/* Ensure columns align well with smaller icons */
 .mobile-nav-bar .col {
     padding: 0;
 }
 
-/* Make the mobile navigation bar height slightly smaller */
 .mobile-nav-bar {
     padding: 10px 0;
 }
@@ -1420,3 +1443,60 @@ figure.photo.hover:before {
       outline: none;
     }
   }
+
+  /* Скрыть сайдбар на мобильных устройствах */
+@media (max-width: 992px) {
+    .profile-sidebar {
+        display: none;
+    }
+    
+    .mobile-profile-sidebar {
+        display: block;
+    }
+}
+
+/* Версия для ПК */
+@media (min-width: 993px) {
+    .mobile-profile-sidebar {
+        display: none;
+    }
+}
+
+.custom-cart-item {
+    margin-bottom: 20px;
+}
+
+.custom-cart-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 992px) {
+    .custom-cart-row {
+        flex-direction: column;
+    }
+
+    .custom-cart-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .custom-btn-minus,
+    .custom-btn-plus {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .item-quantity {
+        width: 60px;
+        height: 40px;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+    }
+
+    .custom-summary-block {
+        margin-top: 20px;
+    }
+}

@@ -43,8 +43,6 @@ class UserProfileForm(forms.ModelForm):
         fields = ('first_name', 'last_name', 'email',
                   'username', 'birthdate', 'phone_number',)
         help_texts = {
-            'username': 'Имя пользователя должно быть уникальным.',
-            'first_name': 'пися.',
-            'last_name': 'попа.',
+            'username': 'Придумайте username.',
             'phone_number': '123'
         }

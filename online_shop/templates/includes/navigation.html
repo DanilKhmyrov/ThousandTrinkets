@@ -6,7 +6,9 @@
         <div class="logo-button d-flex align-items-center">
             <a class="navbar-brand me-3" href="{% url 'store:home' %}" id="siteBrand">
                 <img src="{% static 'img/logo.png' %}" alt="1000 Мелочей" style="border-radius:5px;" width="40" height="40" class="d-inline-block align-text-top">
+                <h4>1000 Мелочей</h4>
             </a>
+            
         </div>
         <!-- Поисковая строка -->
         <div class="search-container position-relative flex-grow-1 d-lg-flex">
@@ -133,11 +135,11 @@
             <div class="col text-center">
                 <a href="{% url 'user:favorites' %}">
                     <i class="fas fa-heart icon-size"></i>
+                    {% if user.is_authenticated %}
                     <span class="badge rounded-pill badge-notification bg-danger">
-                        {% if user.is_authenticated %}
-                            {{ favorites_count }}
-                        {% endif %}
+                        {{ favorites_count }}
                     </span>
+                    {% endif %}
                     <br>
                     <span class="nav-label">Избранное</span>
                 </a>
@@ -150,11 +152,11 @@
             <div class="col text-center">
                 <a href="{% url 'user:shopping-cart' %}">
                     <i class="fas fa-shopping-cart icon-size"></i>
+                    {% if user.is_authenticated %}
                     <span class="badge rounded-pill badge-notification bg-danger">
-                        {% if user.is_authenticated %}
-                            {{ cart_items_count }}
-                        {% endif %}
+                        {{ cart_items_count }}
                     </span>
+                    {% endif %}
                     <br>
                     <span class="nav-label">Корзина</span>
                 </a>

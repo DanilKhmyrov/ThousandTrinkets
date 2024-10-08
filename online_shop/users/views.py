@@ -91,7 +91,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['products'] = get_product_count_text(user.favorites.count())
-        context['cart_items_count'] = get_product_count_text(
+        context['named_cart_items_count'] = get_product_count_text(
             CartItem.objects.filter(cart=user.shopping_cart.get()).count())
         return context
 

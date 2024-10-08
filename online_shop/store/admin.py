@@ -1,10 +1,10 @@
-from .models import Order, OrderItem
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 
 from .models import (CartItem, MainCategory, Category,
-                     Order, OrderItem, Product, ShoppingCart)
+                     Order, OrderItem, Product, ShoppingCart,
+                     Review)
 
 
 class CategoryInline(admin.TabularInline):
@@ -115,3 +115,8 @@ class OrderAdmin(admin.ModelAdmin):
             return f'{product.name} ({item.quantity} шт.)'
         return mark_safe('<br>'.join([generate_product_link(item) for item in items]))
     get_order_items.short_description = 'Товары в заказе'
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'rating', 'comment', 'created_at')

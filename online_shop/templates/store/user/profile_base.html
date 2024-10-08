@@ -1,13 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container-fluid mt-5 mb-5">
-        <div class="row" style="justify-content: center;">
-            <!-- Sidebar -->
-            {% include 'includes/user/profile_sidebar.html' %}
+    <div class="container-fluid mt-3 mb-5">
+        <div class="row justify-content-center">
+            <!-- Sidebar для ПК (будет скрыт на мобильных) -->
+            <div class="d-none d-lg-block col-lg-2">
+                {% include 'includes/user/profile_sidebar.html' %}
+            </div>
             <!-- Content -->
-            <div class="col-md-8 content">
+            <div class="col-lg-8 content">
                 {% block profile_content %}
                 {% endblock %}
+            </div>
+            
+            <!-- Sidebar для мобильных (скрыт на больших экранах) -->
+            <div class="d-lg-none col-12 mb-4">
+                {% if request.resolver_match.view_name == 'user:profile' %}
+                    {% include 'includes/user/profile_mobile_sidebar.html' %}
+                {% endif %}
             </div>
         </div>
     </div>

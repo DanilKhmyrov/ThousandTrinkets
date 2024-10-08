@@ -8,7 +8,6 @@
                 <!-- Левая часть: список товаров -->
                 <div class="cart-items col-lg-8">
                     <h5 class="mt-4 header">Корзина</h5>
-
                     <!-- Фильтр товаров -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
@@ -17,42 +16,40 @@
                         </div>
                         <button class="btn btn-link text-muted">Удалить выбранные</button>
                     </div>
+                    <hr>
                     <!-- Товар -->
                     {% for item in cart_items %}
                     <div class="custom-cart-item mb-3" data-product-id="{{ item.product.id }}">
-                        <div class="d-flex justify-content-between align-items-start p-3 custom-cart-item-body">
-                            <!-- Чекбокс и картинка -->
-                            {% include 'includes/favorite_button.html' with product=item.product %}
-                            <div class="d-flex align-items-start">
-                                <input type="checkbox" class="form-check-input item-checkbox me-3 mt-1">
-                                <div class="me-3">
-                                    {% if item.product.image %}
-                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100px;" class="custom-cart-item-img">
-                                    {% else %}
-                                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="{{ item.product.name }}" style="width: 100px;" class="img-fluid product-image">
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <!-- Описание товара -->
-                            <div class="w-100">
-                                <div class="d-flex justify-content-between">
+                        <div class="row custom-cart-row">
+                            <!-- Первый ряд: картинка и описание -->
+                            <div class="col-12">
+                                <div class="d-flex align-items-start">
+                                    <input type="checkbox" class="form-check-input item-checkbox mt-1">
+                                    <div>
+                                        {% if item.product.image %}
+                                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="custom-cart-item-img">
+                                        {% else %}
+                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="custom-cart-item-img" alt="{{ item.product.name }}">
+                                        {% endif %}
+                                    </div>
                                     <div>
                                         <h6 class="custom-cart-item-name mb-1">{{ item.product.name }}</h6>
                                         <p class="text-muted mb-0">код: {{ item.product.article_number }}</p>
                                         <p class="text-success mb-0">Можно забрать сегодня</p>
                                     </div>
+                                </div>
+                            </div>
+                            <!-- Второй ряд: количество и цены -->
+                            <div class="col-12 d-flex flex-column justify-content-center">
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <div class="d-flex align-items-center">
+                                        <button class="custom-btn-minus me-2" data-action="remove" data-product-id="{{ item.product.id }}">-</button>
+                                        <input type="number" class="form-control item-quantity me-2" value="{{ item.quantity }}" min="1" style="width: 60px; text-align: center;">
+                                        <button class="custom-btn-plus" data-action="add" data-product-id="{{ item.product.id }}">+</button>
+                                    </div>
                                     <div class="text-end">
-                                        
-                                        <!-- Итоговая цена за количество -->
-                                        <p class="fw-bold total-item-price">{{ item.get_total_price|floatformat:0  }} р.</p>
-
-                                        <div class="d-flex align-items-center">
-                                            {% if item.quantity != 1 %}<button class="custom-btn-minus me-2" data-action="remove" data-product-id="{{ item.product.id }}">-</button>{% endif %}
-                                            <input type="number" class="form-control item-quantity" value="{{ item.quantity }}" min="1" style="width: 60px; text-align: center;">
-                                            <button class="custom-btn-plus" data-action="add" data-product-id="{{ item.product.id }}">+</button>
-                                        </div>
-                                        <!-- Цена за одну единицу товара -->
                                         <p class="fw-bold custom-cart-item-price" data-price="{{ item.product.price }}">{{ item.product.price|floatformat:0 }} ₽/шт</p>
+                                        <p class="fw-bold total-item-price">{{ item.get_total_price|floatformat:0 }} р.</p>
                                     </div>
                                 </div>
                             </div>
@@ -97,6 +94,7 @@
         </div>
     </div>
 </div>
+
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 {% endblock %}
 

@@ -1,14 +1,36 @@
 {% extends 'store/user/profile_base.html' %}
 
 {% block profile_content %}
+    <h4 class="full-width-title">Мой кабинет</h4>
     <div class="profile-card-container">
-        <h4 class="full-width-title">Мой кабинет</h4>
         <div class="profile-card">
             <a href="{% url 'user:order_confirmation' %}">
             <div class="card-body">
                 <i class="fas fa-box"></i>
                 <h5 class="card-title">Мои заказы</h5>
                 <p class="card-text">Пока нет заказов</p>
+            </div>
+            </a>
+        </div>
+        <div class="profile-card d-lg-none"> <!-- Скрыто на ПК -->
+            <a href="{% url 'user:favorites' %}">
+            <div class="card-body">
+                <i class="fas fa-heart"></i>
+                <h5 class="card-title">Избранное</h5>
+                <p class="card-text">В избранном {{ products }}</p>
+            </div>
+            </a>
+        </div>
+        <div class="profile-card d-lg-none"> <!-- Скрыто на ПК -->
+            <a href="{% url 'user:shopping-cart' %}">
+            <div class="card-body">
+                <i class="fas fa-shopping-cart"></i>
+                <h5 class="card-title">Корзина</h5>
+                {% if cart_items_count != 0 %}
+                    <p class="card-text">В корзине {{ named_cart_items_count }}</p>
+                {% else %}
+                    <p class="card-text">Пока пусто</p>
+                {% endif %}
             </div>
             </a>
         </div>
@@ -34,7 +56,9 @@
             </div>
         </div>
     </div>
-    <div class="favorite-outer">
+    
+    <!-- Блоки "Избранное" и "Корзина" для ПК -->
+    <div class="favorite-outer d-none d-lg-flex">
         <div class="favorite-card-container">
             <a href="{% url 'user:favorites' %}">
                 <i class="fas fa-heart"></i> Избранное {{ products }}
@@ -47,3 +71,13 @@
         </div>
     </div>
 {% endblock %}
+{% block extra_js %}
+<script>
+    window.addEventListener("load", function () {
+        const firstCard = document.querySelector('.profile-card');
+        if (firstCard) {
+            firstCard.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+        }
+    });
+</script>
+{% endblock extra_js %}

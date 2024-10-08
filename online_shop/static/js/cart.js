@@ -66,19 +66,14 @@ $(document).ready(function() {
                 $('#total-items').text(data.total_items);
                 $('#total-price').text(data.total_price);
 
-                if (quantity === 0 && button) {
-                    button.text('В корзину');
-                    button.data('action', 'add');
-                    button.removeClass('btn-secondary').addClass('btn-danger');
-                } else if (button) {
-                    const cartItem = $(`[data-product-id="${productId}"]`);
-                    cartItem.find('.item-quantity').val(data.item_quantity);
-                    const itemPrice = parseFloat(cartItem.find('.custom-cart-item-price').data('price'));
-                    updateTotalItemPrice(cartItem, itemPrice, data.item_quantity);
-                }
+                const cartItem = $(`[data-product-id="${productId}"]`);
+                cartItem.find('.item-quantity').val(data.item_quantity);
+                const itemPrice = parseFloat(cartItem.find('.custom-cart-item-price').data('price'));
+                updateTotalItemPrice(cartItem, itemPrice, data.item_quantity);
             },
             error: function(xhr, status, error) {
                 alert('Ошибка при обновлении корзины.');
+                console.error(error);
             }
         });
     }
