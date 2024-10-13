@@ -13,7 +13,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import UserProfileForm
 from .tasks import create_order_task
-from store.models import Order, Product, CartItem, ShoppingCart
+from store.models import Order, Product, CartItem, PromoCode, ShoppingCart
 from .utils import get_product_count_text
 
 User = get_user_model()
@@ -24,8 +24,12 @@ User = get_user_model()
 # TODO: Добавить уведомление о новом заказе в админ панели
 def checkout(request):
     user = request.user
+    session = request.session
+    promo_code = session.get('promo_code')
     with transaction.atomic():
-        transaction.on_commit(lambda: create_order_task.delay(user.id))
+        transaction.on_commit(lambda: create_order_task.delay(
+            user.id, promo_code=promo_code))
+    del request.session['promo_code']
     return redirect('user:order_confirmation')
 
 
@@ -147,7 +151,20 @@ class UserShoppingCartView(LoginRequiredMixin, DetailView):
         shopping_cart = self.object.shopping_cart.get()
         context['cart_items'] = CartItem.objects.filter(
             cart=shopping_cart).select_related('product')
-        context['total_price'] = shopping_cart.get_total_price()
+        total_price = shopping_cart.get_total_price()
+        promo_code = self.request.session.get('promo_code')
+        discount = 0
+
+        if promo_code:
+            promo = PromoCode.objects.filter(code=promo_code).first()
+            if promo and promo.is_valid(self.request.user):
+                discount = promo.get_discount_amount(total_price)
+                total_price -= discount
+
+        context['total_price'] = round(total_price, 2)
+        context['discount'] = round(discount, 2)
+        context['promo_code_applied'] = promo_code
+
         return context
 
 

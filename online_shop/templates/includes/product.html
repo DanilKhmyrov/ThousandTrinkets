@@ -1,42 +1,145 @@
-{% load humanize %}
-{% load custom_filters %}
-
-<div class="container mt-5">
-    <div class="row product-card">
-        <div class="col-md-4">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid category-image">
+{% include 'includes/breadcrumb.html' %}
+<section class="product-container row mx-0">
+    <aside class="col-lg-5 mt-3">
+      <div class="border rounded-4 d-flex justify-content-center">
+        {% if product.image %}
+        <a data-fslightbox="gallery" class="rounded-4" href="{{ product.image.url }}">
+          <img class="rounded-4 fit" src="{{ product.image.url }}" alt="{{ product.name }}" />
+        </a>
+        {% else %}
+        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="{{ product.name }}" class="img-fluid product-image">
+        {% endif %}
+      </div>
+      <div class="d-flex justify-content-center mt-3">
+        {% for image in product.additional_images %}
+        <a data-fslightbox="gallery" class="border mx-1 rounded-2" href="{{ image.url }}">
+          <img width="60" height="60" class="rounded-2" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="{{ product.name }}" />
+        </a>
+        {% endfor %}
+      </div>
+    </aside>
+  
+    <main class="col-lg-7">
+      <div class="ps-lg-3">
+        <h4 class="title text-dark">{{ product.name }}</h4>
+        <div class="d-flex flex-row my-3">
+            {% include 'includes/rating.html' with rating=product.rating %}
+          <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>{{ product.orders_count }} заказов</span>
+          <span class="text-success ms-2">
+            <p class="mb-1">
+            В наличии:
+            {% if product.remains < 3 %}
+                <span class="text-danger">Мало</span>
+            {% elif product.remains >= 3 and product.remains <= 10 %}
+                <span class="text-warning">Есть</span>
             {% else %}
-                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="{{ product.name }}" class="img-fluid product-image">
+                <span class="text-success">Много</span>
             {% endif %}
+            {% if product.remains > 0 %}
+                ({{ product.remains|floatformat:0 }} шт.)
+            {% endif %}
+            </p>
+          </span>
         </div>
-        <div class="col-md-8">
-            <h1 class="product-title">{{ product.name }}</h1>
-            <p class="product-article"><strong>Артикул:</strong> {{ product.article_number }}</p>
-            {% include 'includes/favorite_button.html' %}
-            <div class="product-price">
-                <strong>Цена:</strong>
-                <span class="fw-bolder">{{ product.price|floatformat:0|intcomma|replace_commas|safe }} р.</span>
-            </div>
-
-            {% if user.is_superuser %}
-            <div class="admin-fields mt-3">
-                <p><strong>Закупочная цена:</strong> {{ product.purchase_price|floatformat:0|intcomma|replace_commas|safe }} р.</p>
-                <p><strong>Остаток:</strong> {{ product.remains|floatformat:0|intcomma|replace_commas|safe }}</p>
-                <p><strong>Стоимость остатка:</strong> {{ product.remains_cost|floatformat:0|intcomma|replace_commas|safe }} р.</p>
-                <p><strong>Закупочная стоимость остатка:</strong> {{ product.retail_remains_cost|floatformat:0|intcomma|replace_commas|safe }} р.</p>
-                <p><strong>Процент:</strong> {{ product.percent|floatformat:2 }}%</p>
-            </div>
-            {% endif %}
-            {% if product.is_in_cart %}
-                <button class="btn btn-secondary btn-sm add-to-cart-btn" data-product-id="{{ product.id }}" data-action="remove">
-                    Удалить
-                </button>
-            {% else %}
-                <button class="btn btn-danger btn-sm add-to-cart-btn" data-product-id="{{ product.id }}" data-action="add">
-                    В корзину
-                </button>
-            {% endif %}
+  
+        <div class="mb-3">
+          <span class="h5">{{ product.price|floatformat:0 }} ₽</span>
         </div>
+  
+        <p>{{ product.description|truncatechars:200 }}</p>
+  
+        <div class="row">
+          <dt class="col-3">Бренд:</dt>
+          <dd class="col-9">{{ product.brand }}</dd>
+  
+          <dt class="col-3">Категория:</dt>
+          <dd class="col-9">{{ product.category.name }}</dd>
+        </div>
+  
+        <hr />
+  
+        <div class="row mb-4">
+          <div class="col-md-4 col-6">
+            <label class="mb-2">Количество</label>
+            <div class="input-group mb-3" style="width: 170px;">
+              <button class="btn btn-white border border-secondary px-3" type="button" data-action="decrease">
+                <i class="fas fa-minus"></i>
+              </button>
+              <input type="number" class="form-control text-center border border-secondary" value="1" min="1" max="100" />
+              <button class="btn btn-white border border-secondary px-3" type="button" data-action="increase">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        {% if product in is_in_cart %}
+        <button class="btn btn-secondary btn-sm add-to-cart-btn" data-product-id="{{ product.id }}" data-action="remove">
+          Удалить
+        </button>
+        {% else %}
+        <button class="btn btn-danger btn-sm add-to-cart-btn" data-product-id="{{ product.id }}" data-action="add">
+          В корзину
+        </button>
+        {% endif %}
+      </div>
+    </main>
+  </section>
+  
+  <section class="border-top py-4">
+    <div class="product-info-container">
+      <div class="row gx-4">
+        <div class="col-lg-8 mb-4">
+          <div class="border rounded-2 px-3 py-2 bg-white">
+            <!-- Pills navs -->
+            <ul class="nav nav-pills nav-justified mb-3">
+              <li class="nav-item">
+                <a class="nav-link active" data-mdb-toggle="pill" href="#description" role="tab">Описание</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-mdb-toggle="pill" href="#reviews" role="tab">Отзывы ({{ reviews.count }})</a>
+              </li>
+            </ul>
+            <!-- Pills content -->
+            <div class="tab-content">
+              <div class="tab-pane fade show active" id="description" role="tabpanel">
+                <p>{{ product.full_description }}</p>
+              </div>
+              <div class="tab-pane fade" id="reviews" role="tabpanel">
+                {% for review in reviews %}
+                <div class="review mb-3">
+                  <h6>{{ review.user.username }}</h6>
+                  <div class="review-rating">
+                    {% include 'includes/rating.html' with rating=review.rating %}
+                    <p class="custom-cart-item-name">{{ review.comment }}</p>
+                  </div>
+                </div>
+                {% empty %}
+                <p>Отзывов пока нет.</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Similar products -->
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Похожие товары</h5>
+              {% for similar in similar_items %}
+              <div class="d-flex {% if not forloop.last %}mb-3{% endif %}">
+                <a href="{{ similar.url }}" class="me-3">
+                  <img src="{{ similar.image.url }}" style="min-width: 96px; height: 96px;" class="product-image img-md img-thumbnail" />
+                </a>
+                <div class="info">
+                  <a href="{{ similar.url }}" class="nav-link mb-1">{{ similar.name }}</a>
+                  <strong class="text-dark">{{ similar.price }} ₽</strong>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </section>
+  

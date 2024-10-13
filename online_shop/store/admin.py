@@ -3,8 +3,8 @@ from django.utils.safestring import mark_safe
 
 
 from .models import (CartItem, MainCategory, Category,
-                     Order, OrderItem, Product, ShoppingCart,
-                     Review)
+                     Order, OrderItem, Product,
+                     PromoCode, ShoppingCart, Review)
 
 
 class CategoryInline(admin.TabularInline):
@@ -86,16 +86,12 @@ class OrderItemInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemInline]
     list_display = ('id', 'user', 'status', 'created_at',
-                    'updated_at', 'get_total_order_price', 'get_order_items')
+                    'updated_at', 'get_order_items', 'final_price')
     list_filter = ('status', 'created_at', 'updated_at')
     search_fields = ('user__username', 'status', 'id')
-    readonly_fields = ('created_at', 'updated_at', 'get_total_order_price')
+    readonly_fields = ('created_at', 'updated_at')
 
     list_editable = ('status',)
-
-    def get_total_order_price(self, obj):
-        return obj.get_total_price()
-    get_total_order_price.short_description = 'Общая стоимость заказа'
 
     def get_order_items(self, obj):
         """
@@ -119,4 +115,12 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'rating', 'comment', 'created_at')
+    list_display = ('id', 'user', 'product',
+                    'rating', 'comment', 'created_at')
+
+
+@admin.register(PromoCode)
+class PromoCodeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'code',
+                    'discount', 'expiration_date',
+                    'max_usage', 'times_used')

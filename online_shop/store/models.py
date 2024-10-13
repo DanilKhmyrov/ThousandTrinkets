@@ -1,29 +1,19 @@
+from decimal import Decimal
 from django.db import models
 from django.db.models import Sum, F
 from django.urls import reverse
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
 class MainCategory(models.Model):
-    name = models.CharField(
-        'Название',
-        max_length=100,
-        unique=True)
-    slug = models.SlugField(
-        'Слаг',
-        max_length=50,
-        unique=True)
-    icon_class = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True)
+    name = models.CharField('Название', max_length=100, unique=True)
+    slug = models.SlugField('Слаг', max_length=50, unique=True)
+    icon_class = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(
-        'Изображение',
-        upload_to='main_category_images/',
-        blank=True,
-        null=True,)
+        'Изображение', upload_to='main_category_images/', blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('store:main_category', args=[self.slug])
@@ -37,33 +27,14 @@ class MainCategory(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(
-        'Название',
-        max_length=100,
-        unique=True,
-        null=True)
-    slug = models.SlugField(
-        'Слаг',
-        max_length=30,
-        unique=True,
-        blank=True,
-        null=True)
-    main_category = models.ForeignKey(
-        MainCategory,
-        related_name='categories',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name='Главная категория')
-    icon_class = models.CharField(
-        max_length=255,
-        blank=True,
-        null=True)
+    name = models.CharField('Название', max_length=100, unique=True, null=True)
+    slug = models.SlugField('Слаг', max_length=30,
+                            unique=True, blank=True, null=True)
+    main_category = models.ForeignKey(MainCategory, related_name='categories',
+                                      on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Главная категория')
+    icon_class = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(
-        'Изображение',
-        upload_to='category_images/',
-        blank=True,
-        null=True,)
+        'Изображение', upload_to='category_images/', blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('store:category', args=[self.main_category.slug, self.slug])
@@ -77,67 +48,33 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(
-        'Наименование',
-        max_length=100)
-    article_number = models.CharField(
-        'Артикул',
-        max_length=50,
-        unique=True)
-    price = models.FloatField(
-        'Цена',
-        max_length=15,
-        blank=True,
-        null=True)
-    purchase_price = models.FloatField(
-        'Закупочная цена',
-        max_length=15,
-        blank=True,
-        null=True)
-    remains = models.FloatField(
-        'Остаток',
-        max_length=15,
-        blank=True,
-        null=True)
-    remains_cost = models.FloatField(
-        'Стоимость остатка',
-        max_length=15,
-        blank=True,
-        null=True)
-    retail_remains_cost = models.FloatField(
-        'Закупочная стоимость остатка',
-        max_length=15,
-        blank=True,
-        null=True)
-    percent = models.FloatField(
-        'Процент',
-        max_length=15,
-        blank=True,
-        null=True)
-    category = models.ForeignKey(
-        Category,
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name='products',
-        verbose_name='Категория')
+    name = models.CharField('Наименование', max_length=100)
+    article_number = models.CharField('Артикул', max_length=50, unique=True)
+    price = models.DecimalField(
+        'Цена', max_digits=10, decimal_places=2, blank=True, null=True)
+    purchase_price = models.DecimalField(
+        'Закупочная цена', max_digits=10, decimal_places=2, blank=True, null=True)
+    remains = models.DecimalField(
+        'Остаток', max_digits=10, decimal_places=2, blank=True, null=True)
+    remains_cost = models.DecimalField(
+        'Стоимость остатка', max_digits=10, decimal_places=2, blank=True, null=True)
+    retail_remains_cost = models.DecimalField(
+        'Закупочная стоимость остатка', max_digits=10, decimal_places=2, blank=True, null=True)
+    percent = models.DecimalField(
+        'Процент', max_digits=5, decimal_places=2, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL,
+                                 null=True, related_name='products', verbose_name='Категория')
     image = models.ImageField(
-        'Изображение',
-        upload_to='product_images/',
-        blank=True,
-        null=True)
-    rating = models.FloatField(default=0)
+        'Изображение', upload_to='product_images/', blank=True, null=True)
+    rating = models.DecimalField(default=0, max_digits=3, decimal_places=2)
 
     def get_absolute_url(self):
-        return reverse(
-            'store:product',
-            args=[self.category.main_category.slug,
-                  self.category.slug,
-                  self.article_number])
+        return reverse('store:product', args=[self.category.main_category.slug, self.category.slug, self.article_number])
 
     def update_rating(self):
         reviews = self.reviews.all()
         avg_rating = reviews.aggregate(models.Avg('rating'))[
-            'rating__avg'] or 0
+            'rating__avg'] or Decimal('0')
         self.rating = avg_rating
         self.save()
 
@@ -152,14 +89,13 @@ class Product(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey(
-        Product,
-        related_name='reviews',
-        on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+        Product, related_name='reviews', on_delete=models.CASCADE, verbose_name='Товар')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='Пользователь')
     rating = models.PositiveIntegerField(
-        choices=[(i, i) for i in range(1, 6)], default=5)
-    comment = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+        'Рейтинг', choices=[(i, i) for i in range(1, 6)], default=5)
+    comment = models.TextField('Отзыв')
+    created_at = models.DateTimeField('Создан', auto_now_add=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -174,14 +110,9 @@ class Review(models.Model):
         verbose_name_plural = 'Отзывы'
 
 
-# TODO: Добавить общую скидку на коризну каждому пользователю, которая зависит от суммы заказа
-
-
 class AbstractCart(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE,
-        related_name='%(class)s',
-        verbose_name='Пользователь')
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='%(class)s', verbose_name='Пользователь')
     created_at = models.DateTimeField('Создана', auto_now_add=True)
     updated_at = models.DateTimeField('Обновлена', auto_now=True)
 
@@ -190,23 +121,15 @@ class AbstractCart(models.Model):
 
     def get_total_price(self):
         """Подсчитывает общую стоимость товаров в корзине/заказе."""
-        return self.items.aggregate(
-            total_price=Sum(F('price') * F('quantity'))
-        )['total_price'] or 0
+        return self.items.aggregate(total_price=Sum(F('price') * F('quantity')))['total_price'] or Decimal('0')
 
 
 class AbstractCartItem(models.Model):
     product = models.ForeignKey(
-        'Product',
-        on_delete=models.CASCADE,
-        verbose_name='Товар')
+        'Product', on_delete=models.CASCADE, verbose_name='Товар')
     quantity = models.PositiveIntegerField('Количество', default=1)
     price = models.DecimalField(
-        'Цена',
-        max_digits=10,
-        decimal_places=2,
-        blank=True,
-        null=True)
+        'Цена', max_digits=10, decimal_places=2, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.price is None:
@@ -224,12 +147,8 @@ class AbstractCartItem(models.Model):
 
 
 class ShoppingCart(AbstractCart):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='shopping_cart',
-        verbose_name='Пользователь'
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='shopping_cart', verbose_name='Пользователь')
 
     def __str__(self):
         return f'Корзина пользователя {self.user.username}'
@@ -241,12 +160,8 @@ class ShoppingCart(AbstractCart):
 
 
 class CartItem(AbstractCartItem):
-    """Конкретная модель элементов корзины."""
-    cart = models.ForeignKey(
-        ShoppingCart,
-        on_delete=models.CASCADE,
-        related_name='items',
-        verbose_name='Корзина')
+    cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE,
+                             related_name='items', verbose_name='Корзина')
 
     def __str__(self):
         return f'{self.product.name} в количестве {self.quantity}'
@@ -257,22 +172,65 @@ class CartItem(AbstractCartItem):
         verbose_name_plural = 'Товары'
 
 
+class PromoCode(models.Model):
+    code = models.CharField('Промокод', max_length=50, unique=True)
+    discount = models.DecimalField('Скидка %', max_digits=5, decimal_places=2)
+    expiration_date = models.DateTimeField('Срок истечения')
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             null=True, blank=True, verbose_name='Пользователь')
+    max_usage = models.PositiveIntegerField(
+        'Колличество промокодов', default=1)
+    times_used = models.PositiveIntegerField(
+        'Колличество использований', default=0)
+
+    def __str__(self):
+        return self.code
+
+    class Meta:
+        verbose_name = 'Промокод'
+        verbose_name_plural = 'Промокоды'
+        ordering = ['-id']
+
+    def is_valid(self, user=None):
+        """Проверка валидности промокода"""
+        if self.expiration_date <= timezone.now():
+            return False
+        if self.times_used >= self.max_usage:
+            return False
+        if self.user and self.user != user:
+            return False
+        return True
+
+    def get_discount_amount(self, total_price):
+        """Рассчитываем сумму скидки на основе процента"""
+        total_price = Decimal(total_price)
+        return total_price * (self.discount / Decimal('100'))
+
+    def apply_code(self):
+        """Увеличиваем счетчик использования промокода"""
+        self.times_used += 1
+        self.save()
+
+
 class Order(AbstractCart):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='orders',
-        verbose_name='Пользователь'
-    )
-    status = models.CharField(
-        max_length=20, choices=[
-            ('awaiting_delivery', 'Ожидает вручения'),
-            ('assembling', 'В сборке'),
-            ('confirmed', 'Подтвержден'),
-            ('received', 'Получен'),
-            ('canceled', 'Отменен'),
-            ('returned', 'Возвращен')
-        ], default='confirmed')
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='orders', verbose_name='Пользователь')
+    status = models.CharField(max_length=20, choices=[
+        ('awaiting_delivery', 'Ожидает вручения'),
+        ('assembling', 'В сборке'),
+        ('confirmed', 'Подтвержден'),
+        ('received', 'Получен'),
+        ('canceled', 'Отменен'),
+        ('returned', 'Возвращен')
+    ], default='confirmed')
+    total_price = models.DecimalField(
+        'Общая сумма заказа', max_digits=10, decimal_places=2)
+    discount = models.DecimalField(
+        'Скидка', max_digits=10, decimal_places=2, default=0)
+    final_price = models.DecimalField(
+        'Итоговая цена', max_digits=10, decimal_places=2)
+    promo_code = models.CharField(
+        'Промокод', max_length=50, blank=True, null=True)
 
     def __str__(self):
         return f'Заказ пользователя {self.user.username}'
@@ -282,13 +240,21 @@ class Order(AbstractCart):
         verbose_name_plural = 'Заказы'
         ordering = ['-created_at']
 
+    def apply_promo_code(self, promo_code):
+        """Применение промокода для расчета скидки"""
+        if promo_code and promo_code.is_valid(self.user):
+            discount_amount = promo_code.get_discount_amount(self.total_price)
+            self.discount = discount_amount
+            self.final_price = self.total_price - discount_amount
+            self.promo_code = promo_code.code
+        else:
+            self.final_price = self.total_price
+        self.save()
+
 
 class OrderItem(AbstractCartItem):
-    """Конкретная модель элементов заказа."""
     order = models.ForeignKey(
-        Order, on_delete=models.CASCADE,
-        related_name='items',
-        verbose_name='Заказ')
+        Order, on_delete=models.CASCADE, related_name='items', verbose_name='Заказ')
 
     def __str__(self):
         return f'{self.product.name} в количестве {self.quantity} для заказа {self.order.id}'

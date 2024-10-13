@@ -80,9 +80,17 @@
                         <h5 class="header">Оплата</h5>
                         <p>Оплата по QR-коду</p>
                         <p>Товаров: <span id="total-items">{{ cart_items_count }}</span></p>
+                        <div class="promo-code-section">
+                            <label for="promo-code-input">Промокод:</label>
+                            <input type="text" id="promo-code-input" placeholder="Введите промокод">
+                            <button id="apply-promo-btn">Применить</button>
+                            <p id="promo-code-message" style="display: none;"></p>
+                            <p>Промокод применен: <span id="promo-code-applied">{{ promo_code_applied }}</span></p>
+                            <p>Скидка: <span id="discount">{{ discount }}</span> р.</p>
+                        </div>
                         <div class="total-price">
-                            <h5>Итого</h5>
-                            <p class="price fw-bold"><span id="total-price">{{ total_price|floatformat:0 }}</span> р.</p>
+                            <h5>Итого:</h5>
+                            <p class="price fw-bold"><span id="total-price">{{ total_price }}</span> р.</p>
                         </div>
                         <form method="POST" action="{% url 'user:order_checkout' %}">
                             {% csrf_token %}

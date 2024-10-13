@@ -206,52 +206,6 @@ a.nav-menu-item {
     color: #007bff;
 }
 
-.list-group-item:first-child {
-    border-top-left-radius: 0; /* Убираем закругление сверху слева */
-    border-top-right-radius: 0; /* Убираем закругление сверху справа */
-}
-
-/* Общие стили для всех элементов списка */
-.list-group-item {
-    background-color: #fff; /* Белый фон */
-    color: #343a40; /* Тёмный текст */
-    border: none; /* Без рамок */
-    padding: 0.5rem 1rem; /* Отступы */
-    border-radius: 0; /* Убираем закругление полностью */
-    transition: background-color 0.3s; /* Переход фона */
-}
-
-/* Удаляем закругления для всех элементов списка */
-.list-group-item:last-child {
-    border-bottom-left-radius: 0; /* Убираем закругление снизу слева */
-    border-bottom-right-radius: 0; /* Убираем закругление снизу справа */
-}
-
-.list-group-item a {
-    color: #343434;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    font-size: 16px;
-    transition: color 0.3s;
-}
-
-.list-group-item:hover {
-    transition: border 200ms linear;
-    margin-left: 2px;
-    border-left: 10px solid black;
-}
-
-.list-group-item a:hover {
-    background-color: #ffffff;
-    color: #495057;
-}
-
-.list-group-item i {
-    margin-right: 0.5rem;
-}
-
 /* Category Links */
 .category-link {
     display: block;
@@ -340,18 +294,6 @@ a.nav-menu-item {
     border-color: #e64a19;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
-.card {
-    transition: transform 0.3s, box-shadow 0.3s;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(64, 64, 64, 0.505);
-}
-
 
 .product-img {
     border-top-left-radius: 10px;
@@ -836,28 +778,24 @@ figure.photo.hover:before {
     display: none;
 }
 .breadcrumb {
-    background-color: #f8f9fa; /* Светлый серый фон */
-    border-radius: 0.25rem; /* Скругленные углы */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Легкая тень для глубины */
-    padding: 0.75rem 1rem; /* Отступы для пространства */
     display: flex; /* Используем flexbox для выравнивания */
     align-items: center; /* Центрируем элементы вертикально */
 }
 
 .breadcrumb-item + .breadcrumb-item::before {
-    content: '>'; /* Разделитель */
+    content: '/'; /* Разделитель */
     color: #6c757d; /* Серый цвет */
     margin: 0 0.5rem; /* Отступ вокруг разделителя */
 }
 
 .breadcrumb-item a {
-    color: #007bff; /* Цвет ссылки */
+    color: #747474; /* Цвет ссылки */
     text-decoration: none; /* Убираем подчеркивание */
     transition: color 0.2s; /* Плавный переход */
 }
 
 .breadcrumb-item a:hover {
-    color: #0056b3; /* Темнее цвет при наведении */
+    color: #020407; /* Темнее цвет при наведении */
 }
 
 .breadcrumb-item.active {
@@ -1499,4 +1437,49 @@ figure.photo.hover:before {
     .custom-summary-block {
         margin-top: 20px;
     }
+}
+.product-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.product-rating i {
+    color: #ffb400; /* Цвет звездочек */
+}
+
+.product-price {
+    font-size: 22px;
+    color: #e74c3c;
+}
+
+.review-rating i {
+    color: #ffc107;
+}
+
+.review {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+/* product container */
+
+.product-container {
+    justify-content: center;
+    background-color: #fff;
+    width: 100%;
+    margin: 0;
+    align-items: center;
+}
+.product-container img {
+    max-height: 40vh;
+    max-width: 100%;
+    margin: auto;
+}
+
+.product-info-container {
+    max-width: 100%;
+    margin: 0 1rem;
+    padding: 0 15px;
+    box-sizing: border-box;
 }

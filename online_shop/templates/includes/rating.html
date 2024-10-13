@@ -1,1 +1,9 @@
-<i class="far fa-star"></i>
+<div class="text-warning mb-1 me-2">
+{% if rating %}
+    <i class="fa fa-star"></i>
+    <span class="ms-1">{{ rating|floatformat:1 }}</span>
+{% else %}
+    <i class="far fa-star"></i>
+    <span class="ms-1">Нет отзывов</span>
+{% endif %}
+</div>

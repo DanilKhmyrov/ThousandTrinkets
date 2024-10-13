@@ -10,7 +10,7 @@
         <div class="order-card {{ order.status }}">
             <div class="order-header">
                 <h5>Заказ №{{ order.id }} от {{ order.created_at|date:"d.m.Y" }}</h5>
-                <span class="order-status">{{ order.get_status_display }}</span>
+                <span class="order-status">{{ order.get_status_display }} ({{ order.updated_at }})</span>
             </div>
             <div class="order-body">
                 <ul class="order-items">
@@ -30,7 +30,9 @@
                     {% endfor %}
                 </ul>
                 <div class="order-total">
-                    Общая стоимость: {{ order.get_total_price }} ₽
+                    Общая стоимость: {{ order.total_price }} ₽
+                    Скидка: {{ order.discount }} ₽
+                    Конечная стоимость: {{ order.final_price }} ₽
                 </div>
             </div>
         </div>

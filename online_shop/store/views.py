@@ -1,9 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.views import View
 from django.views.generic import DetailView, ListView
 from django.db.models import Q, Exists, OuterRef
 
-from .models import CartItem, Product, Category, MainCategory
+from .models import CartItem, Product, Category, MainCategory, PromoCode
 
 
 # FIXME: Не работает с пробелами или нужен частичный поиск
@@ -36,6 +37,31 @@ def ajax_search(request):
         'has_more': has_more,
         'total_results': total_results
     })
+
+
+class ApplyPromoCodeView(View):
+    def post(self, request):
+
+        promo_code = request.POST.get('promo_code')
+        cart = request.user.shopping_cart.get()
+        try:
+            promo = PromoCode.objects.get(code=promo_code)
+            if promo.is_valid(request.user):
+                request.session['promo_code'] = promo_code
+                discount = promo.get_discount_amount(cart.get_total_price())
+                new_total_price = cart.get_total_price() - discount
+                discount = round(discount, 2)
+                return JsonResponse({
+                    'success': True,
+                    'new_total_price': new_total_price,
+                    'discount': discount
+                })
+            else:
+                return JsonResponse(
+                    {'success': False, 'error': 'Промокод недействителен или был исчерпан.'})
+        except PromoCode.DoesNotExist:
+            return JsonResponse(
+                {'success': False, 'error': 'Промокод не найден.'})
 
 
 class SearchResultsView(ListView):
@@ -83,13 +109,13 @@ class IndexListView(ListView):
                     cart__user=user, product_id=OuterRef('pk'))
             )
 
-            queryset = Product.objects.select_related('category', 'category__main_category').annotate(
+            queryset = Product.objects.select_related('category', 'category__main_category').prefetch_related('reviews').annotate(
                 is_favorite=is_favorite,
                 is_in_cart=is_in_cart
             )
         else:
             queryset = Product.objects.select_related(
-                'category', 'category__main_category')
+                'category', 'category__main_category').prefetch_related('reviews')
 
         return queryset
 
@@ -147,4 +173,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['current_category'] = self.object.category
         context['current_main_category'] = self.object.category.main_category
+        context['reviews'] = self.object.reviews.select_related('user')
+        context['similar_items'] = Product.objects.filter(
+            category=self.object.category)[:2]
         return context

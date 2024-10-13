@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.urls import path, include
-from .views import (IndexListView, CategoryListView,
+from .views import (ApplyPromoCodeView, IndexListView, CategoryListView,
                     ProductDetailView, MainCategoryListView,
                     SearchResultsView, ajax_search)
 
@@ -16,6 +16,7 @@ urlpatterns += [
     path('', IndexListView.as_view(), name='home'),
     path('search/', SearchResultsView.as_view(), name='search_results'),
     path('ajax-search/', ajax_search, name='ajax_search'),
+    path('apply-promo/', ApplyPromoCodeView.as_view(), name='apply_promo_code'),
     path('<str:main_category_slug>/',
          MainCategoryListView.as_view(), name='main_category'),
     path('<str:main_category_slug>/<str:category_slug>/',

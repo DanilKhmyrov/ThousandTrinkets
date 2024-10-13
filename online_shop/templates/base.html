@@ -36,7 +36,7 @@
     <!-- Подвал -->
     {% comment %} {% include 'includes/footer.html' %} {% endcomment %}
     {% include 'includes/button_back2top.html' %}
-    <div id="urls" data-update-cart-url="{% url 'user:update_cart' %}" data-ajax-search-url="{% url 'store:ajax_search' %}" data-favorite-url="{% url 'user:toggle_favorite' 0 %}"></div>
+    <div id="urls" data-update-cart-url="{% url 'user:update_cart' %}" data-apply-promo="{% url "store:apply_promo_code" %}" data-ajax-search-url="{% url 'store:ajax_search' %}" data-favorite-url="{% url 'user:toggle_favorite' 0 %}"></div>
     <!-- Подключение MDB JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
