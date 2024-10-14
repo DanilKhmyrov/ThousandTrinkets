@@ -1,0 +1,66 @@
+{% extends 'store/user/profile_base.html' %}
+{% block profile_content %}
+<h2 class="mb-4 text-center">Мои Промокоды</h2>
+<div class="container mt-4">
+    <!-- Alert для копирования -->
+    <div class="alert alert-success alert-dismissible fade show copy-alert" role="alert" style="display:none; position: fixed; top: 20px; right: 20px; z-index: 9999;">
+        Промокод <strong id="promo-code-alert"></strong> успешно скопирован!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    {% if promo_codes.exists %}
+        <div class="row">
+            {% for promo in promo_codes %}
+            <div class="col-md-6 col-lg-6 mb-3">
+                <div class="promo-item position-relative p-3" onclick="copyToClipboard('{{ promo.code }}')">
+                    <!-- Промокод -->
+                    <div class="promo-header d-flex justify-content-between align-items-center">
+                        <div class="promo-code-container">
+                            <h3 class="promo-code">{{ promo.code }}</h3>
+                        </div>
+                        <span class="promo-status {% if promo.is_valid %}valid{% else %}expired{% endif %}">
+                            {% if promo.is_valid %}Действителен{% else %}Истек{% endif %}
+                        </span>
+                    </div>
+
+                    <!-- Детали промокода -->
+                    <div class="promo-details mt-3">
+                        <p><strong>Скидка:</strong> {{ promo.discount }}%</p>
+                        <p><strong>Действителен до:</strong> 
+                            {% if promo.expiration_date %}
+                                {{ promo.expiration_date|date:"d.m.Y" }}
+                            {% else %}
+                                Не ограничен
+                            {% endif %}
+                        </p>
+                        <p><strong>Использовано:</strong> {{ promo.times_used }} / {{ promo.max_usage }}</p>
+                        <p>
+                            {% if not promo.user %}Общая{% else %}<strong>Персональная</strong>{% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted text-center">У вас пока нет доступных промокодов.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function copyToClipboard(code) {
+        navigator.clipboard.writeText(code).then(function() {
+            // Показать уведомление с промокодом
+            document.getElementById('promo-code-alert').innerText = code;
+            document.querySelector('.copy-alert').style.display = 'block';
+            setTimeout(() => {
+                document.querySelector('.copy-alert').style.display = 'none';
+            }, 3000);
+        }, function(err) {
+            alert('Ошибка при копировании промокода');
+        });
+    }
+</script>
+{% endblock extra_js %}

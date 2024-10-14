@@ -17,7 +17,7 @@
         <a href="#" class="profile-menu-item-link">
             Мои отзывы и вопросы
         </a>
-        <a href="#" class="profile-menu-item-link">
+        <a href="{% url 'user:promo-codes' %}" class="profile-menu-item-link">
             Промокоды
         </a>
         <a href="{% url 'user:me' %}" class="profile-menu-item-link {% if view_name == 'user:me' %}active{% endif %}">

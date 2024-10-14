@@ -1,12 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView, ListView, UpdateView
 from django.http import JsonResponse
 from django.db import transaction
+from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.http import require_POST
@@ -181,3 +180,13 @@ class UserOrderListView(LoginRequiredMixin, ListView):
             .prefetch_related('items__product__category')
             .select_related('user')
         )
+
+
+class PromoCodeListView(LoginRequiredMixin, ListView):
+    model = PromoCode
+    template_name = 'store/user/profile_promo_code.html'
+    context_object_name = 'promo_codes'
+
+    def get_queryset(self):
+        return PromoCode.objects.filter(
+            Q(user=self.request.user) | Q(user__isnull=True)).select_related('user')
