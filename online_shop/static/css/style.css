@@ -1368,6 +1368,10 @@ figure.photo.hover:before {
     padding: 10px 0;
 }
 
+.icon-size {
+    font-size: x-large;
+}
+
 #suggestions-mobile {
     margin-top: 5px;
     width: 96%;
@@ -1557,4 +1561,101 @@ figure.photo.hover:before {
     right: 20px;
     z-index: 9999;
     display: none;
+}
+
+.order-list-container {
+    margin-top: 20px;
+}
+
+.order-items-images img {
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.more-items {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.order-options a {
+    font-size: 0.9rem;
+}
+
+.order-total {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Dropdown для статуса заказа */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #212529;
+    color: white;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+    z-index: 999;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown.show .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu ul {
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.progress-container {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.step {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.step-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    margin-right: 10px;
+}
+
+.step.completed .step-indicator {
+    background-color: #28a745;
+}
+
+.step-arrow {
+    text-align: center;
+    font-size: 12px;
+    color: #c14242;
+}
+
+@media (min-width: 768px){
+    .step-arrow {
+        margin-left: 3px;
+    }
+}
+
+.step span {
+    font-size: 14px;
+    color: white;
 }

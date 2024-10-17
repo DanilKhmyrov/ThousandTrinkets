@@ -28,7 +28,8 @@ def checkout(request):
     with transaction.atomic():
         transaction.on_commit(lambda: create_order_task.delay(
             user.id, promo_code=promo_code))
-    del request.session['promo_code']
+    if session.get('promo_code'):
+        del session['promo_code']
     return redirect('user:order_confirmation')
 
 

@@ -2,37 +2,57 @@
 
 {% block profile_content %}
 <div class="order-list-container">
-    <h4 class="full-width-title">Мои заказы</h4>
+    <h4 class="full-width-title mb-4">Мои заказы</h4>
     
     {% if orders %}
     <div class="order-list">
         {% for order in orders %}
-        <div class="order-card {{ order.status }}">
-            <div class="order-header">
-                <h5>Заказ №{{ order.id }} от {{ order.created_at|date:"d.m.Y" }}</h5>
-                <span class="order-status">{{ order.get_status_display }} ({{ order.updated_at }})</span>
-            </div>
-            <div class="order-body">
-                <ul class="order-items">
-                    {% for item in order.items.all %}
-                    <li class="order-item">
-                        <div class="order-item-image">
-                            {% if item.product.image %}
-                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="40" height="40">
-                            {% else %}
-                                <img src="https://via.placeholder.com/40" alt="Нет изображения" width="40" height="40">
+        <div class="card mb-3 p-4 border-0 rounded-lg">
+            <div class="row">
+                <div class="col-lg-8 col-md-6 col-sm-6">
+                    <!-- Заголовок заказа и дата -->
+                    <h5 class="mb-1">Заказ от {{ order.created_at|date:"d.m.Y" }}</h5>
+                    <div class="dropdown" id="dropdown">
+                        <!-- Кнопка с динамическим статусом заказа -->
+                        <button class="btn dropdown-toggle" id="dropdownButton">{{ order.get_status_display }}</button>
+
+                        <div class="dropdown-menu p-3" id="dropdownMenu" style="min-width: 200px;">
+                            <ul class="progress-container">
+                                {% for step in order.get_status_pipeline %}
+                                    <li class="step {% if step.completed %}completed{% endif %}">
+                                        <span class="step-indicator"></span>
+                                        <span>{{ step.label }}</span>
+                                    </li>
+                                    {% if not forloop.last %}
+                                        <li class="step-arrow">&#8595;</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Сумма заказа -->
+                <div class="col-lg-4 col-md-6 col-sm-6 text-end">
+                    <p class="order-total mb-2"><strong>{{ order.final_price|floatformat:1 }} ₽</strong></p>
+                    <div class="d-flex justify-content-end align-items-center mb-3">
+                        <div class="order-items-images d-flex">
+                            {% for item in order.items.all|slice:":3" %}  <!-- Показываем только 3 товара -->
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded me-2" width="50" height="50">
+                                {% else %}
+                                    <img src="https://dummyimage.com/50x50/dee2e6/6c757d.jpg" alt="{{ item.product.name }}" class="rounded me-2" width="50" height="50">
+                                {% endif %}
+                            {% endfor %}
+                            {% if order.items.count > 3 %}
+                                <div class="more-items ms-2">+{{ order.items.count|add:"-3" }}</div>
                             {% endif %}
                         </div>
-                        <div class="order-item-info">
-                            <a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a> — {{ item.quantity }} шт.
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-                <div class="order-total">
-                    Общая стоимость: {{ order.total_price }} ₽
-                    Скидка: {{ order.discount }} ₽
-                    Конечная стоимость: {{ order.final_price }} ₽
+                    </div>
+                </div>
+                <div class="d-none order-options d-flex justify-content-end">
+                    <a href="#" class="text-primary me-3">Повторить заказ</a>
+                    <a href="#" class="text-muted me-3">Скрыть заказ</a>
+                    <a href="#" class="text-muted">Что-то не так?</a>
                 </div>
             </div>
         </div>
@@ -43,3 +63,23 @@
     {% endif %}
 </div>
 {% endblock %}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdown = document.getElementById('dropdown');
+        const dropdownButton = document.getElementById('dropdownButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        dropdownButton.addEventListener('click', function (e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    });
+</script>
+{% endblock extra_js %}
