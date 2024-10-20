@@ -302,7 +302,7 @@ class Order(AbstractCart):
     STATUS_CHOICES = [
         ('awaiting_delivery', 'Ожидает вручения'),
         ('assembling', 'В сборке'),
-        ('confirmed', 'Подтвержден'),
+        ('confirmed', 'Заказ создан'),
         ('received', 'Получен'),
         ('canceled', 'Отменен'),
         ('returned', 'Возвращен')
@@ -313,6 +313,7 @@ class Order(AbstractCart):
         verbose_name='Пользователь'
     )
     status = models.CharField(
+        'Статус заказа',
         max_length=20,
         choices=STATUS_CHOICES,
         default='confirmed'
@@ -352,7 +353,7 @@ class Order(AbstractCart):
         if self.status in status_order:
             current_index = status_order.index(self.status)
         else:
-            current_index = len(status_order)
+            current_index = len(status_order)  # FIXME: НАСТРОИТЬ ДЛЯ ВОЗВРАТОВ
 
         return [
             {

@@ -1,45 +1,6 @@
 $(document).ready(function() {
-    const applyPromoUrl = $('#urls').data('apply-promo');  // URL для применения промокода
     const updateCartUrl = $('#urls').data('update-cart-url');
     const csrftoken = $('[name=csrfmiddlewaretoken]').val();
-
-    // Применение промокода
-    $('#apply-promo-btn').on('click', function(event) {
-        event.preventDefault();
-
-        const promoCode = $('#promo-code-input').val();
-        if (promoCode) {
-            applyPromoCode(promoCode, applyPromoUrl, csrftoken);
-        } else {
-            $('#promo-code-message').text('Пожалуйста, введите промокод').show();
-        }
-    });
-
-    function applyPromoCode(promoCode, applyPromoUrl, csrftoken) {
-        $.ajax({
-            url: applyPromoUrl,
-            type: 'POST',
-            data: {
-                promo_code: promoCode,
-                csrfmiddlewaretoken: csrftoken
-            },
-            success: function(data) {
-                if (data.success) {
-                    $('#total-price').text(data.new_total_price);
-                    $('#discount').text('Скидка: ' + data.discount + ' р.');
-                    $('#promo-code-applied').text('Промокод применен: ' + promoCode);
-                    $('#promo-code-input').hide();  // Скрываем поле ввода после успешного применения
-                    $('#apply-promo-btn').hide();
-                } else {
-                    $('#promo-code-message').text(data.error).show();
-                }
-            },
-            error: function(xhr, status, error) {
-                $('#promo-code-message').text('Ошибка при применении промокода.').show();
-                console.error(error);
-            }
-        });
-    }
 
     // Обновление товаров в корзине
     const catalogButtons = $('.add-to-cart-btn');
@@ -91,29 +52,39 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: csrftoken
             },
             success: function(data) {
-                if (button) {
-                    if (quantity > 0) {
-                        button.text('Удалить');
-                        button.data('action', 'remove');
-                        button.removeClass('btn-danger').addClass('btn-secondary');
-                    } else {
-                        button.text('В корзину');
-                        button.data('action', 'add');
-                        button.removeClass('btn-secondary').addClass('btn-danger');
+                // Обработка успешного запроса
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    // Обновление UI корзины
+                    if (button) {
+                        if (quantity > 0) {
+                            button.text('Удалить');
+                            button.data('action', 'remove');
+                            button.removeClass('btn-danger').addClass('btn-secondary');
+                        } else {
+                            button.text('В корзину');
+                            button.data('action', 'add');
+                            button.removeClass('btn-secondary').addClass('btn-danger');
+                        }
                     }
+
+                    $('#total-items').text(data.total_items);
+                    $('#total-price').text(data.total_price);
+
+                    const cartItem = $(`[data-product-id="${productId}"]`);
+                    cartItem.find('.item-quantity').val(data.item_quantity);
+                    const itemPrice = parseFloat(cartItem.find('.custom-cart-item-price').data('price'));
+                    updateTotalItemPrice(cartItem, itemPrice, data.item_quantity);
                 }
-
-                $('#total-items').text(data.total_items);
-                $('#total-price').text(data.total_price);
-
-                const cartItem = $(`[data-product-id="${productId}"]`);
-                cartItem.find('.item-quantity').val(data.item_quantity);
-                const itemPrice = parseFloat(cartItem.find('.custom-cart-item-price').data('price'));
-                updateTotalItemPrice(cartItem, itemPrice, data.item_quantity);
             },
-            error: function(xhr, status, error) {
-                alert('Ошибка при обновлении корзины.');
-                console.error(error);
+            error: function(xhr) {
+                // Если код ошибки 403, перенаправляем на страницу логина
+                if (xhr.status === 403 && xhr.responseJSON && xhr.responseJSON.redirect) {
+                    window.location.href = xhr.responseJSON.redirect;
+                } else {
+                    alert('Ошибка при обновлении корзины.');
+                }
             }
         });
     }

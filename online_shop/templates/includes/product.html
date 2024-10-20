@@ -127,12 +127,18 @@
               <h5 class="card-title">Похожие товары</h5>
               {% for similar in similar_items %}
               <div class="d-flex {% if not forloop.last %}mb-3{% endif %}">
-                <a href="{{ similar.url }}" class="me-3">
-                  <img src="{{ similar.image.url }}" style="min-width: 96px; height: 96px;" class="product-image img-md img-thumbnail" />
-                </a>
+                {% if similar.image %}
+                  <a href="{{ similar.get_absolute_url }}" class="me-3">
+                    <img src="{{ similar.image.url }}" style="min-width: 96px; height: 96px;" class="product-image img-md img-thumbnail" />
+                  </a>
+                {% else %}
+                  <a href="{{ similar.get_absolute_url }}" class="me-3">
+                    <img src="https://dummyimage.com/60x60/dee2e6/6c757d.jpg" alt="{{ item.product.name }}" class="product-image img-md img-thumbnail" style="min-width: 96px; height: 96px;">
+                  </a>
+                {% endif %}
                 <div class="info">
-                  <a href="{{ similar.url }}" class="nav-link mb-1">{{ similar.name }}</a>
-                  <strong class="text-dark">{{ similar.price }} ₽</strong>
+                  <a href="{{ similar.get_absolute_url }}" class="nav-link mb-1">{{ similar.name }}</a>
+                  <strong class="text-dark">{{ similar.price|floatformat:0 }} ₽</strong>
                 </div>
               </div>
               {% endfor %}

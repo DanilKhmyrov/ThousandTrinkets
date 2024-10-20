@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block title %}О нас{% endblock title %}
 {% block content %}
-<p>123</p>
+<!-- О нас Section -->
+<section class="container py-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <h2 class="mb-4">О нас</h2>
+            <p class="lead">Мы предлагаем вам широкий ассортимент товаров с быстрой доставкой по всей стране.</p>
+            <p>Наш интернет-магазин сотрудничает с мировыми брендами, чтобы предложить вам лучшие товары по отличным ценам. Наши клиенты всегда могут рассчитывать на качественное обслуживание и быструю доставку.</p>
+            <a href="{% url 'pages:about' %}" class="btn btn-primary">Узнать больше</a>
+        </div>
+        <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0" alt="О компании" class="img-fluid rounded shadow-lg">
+        </div>
+    </div>
+</section>
 {% endblock content %}

@@ -7,40 +7,45 @@
     {% if orders %}
     <div class="order-list">
         {% for order in orders %}
-        <div class="card mb-3 p-4 border-0 rounded-lg">
-            <div class="row">
-                <div class="col-lg-8 col-md-6 col-sm-6">
-                    <!-- Заголовок заказа и дата -->
-                    <h5 class="mb-1">Заказ от {{ order.created_at|date:"d.m.Y" }}</h5>
-                    <div class="dropdown" id="dropdown">
-                        <!-- Кнопка с динамическим статусом заказа -->
-                        <button class="btn dropdown-toggle" id="dropdownButton">{{ order.get_status_display }}</button>
-
-                        <div class="dropdown-menu p-3" id="dropdownMenu" style="min-width: 200px;">
-                            <ul class="progress-container">
-                                {% for step in order.get_status_pipeline %}
-                                    <li class="step {% if step.completed %}completed{% endif %}">
-                                        <span class="step-indicator"></span>
-                                        <span>{{ step.label }}</span>
-                                    </li>
-                                    {% if not forloop.last %}
-                                        <li class="step-arrow">&#8595;</li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
+        <div class="order-card card mb-3 p-3 border-0">
+            <div class="order-header row align-items-baseline">
+                <div class="col-7">
+                    <a href="{% url 'user:order-detail' order.id %}">
+                    <h5 class="cmb-1">Заказ от {{ order.created_at|date:"d.m.Y" }}</h5>
+                    </a>
+                </div>
+                <div class="col-5 text-end">
+                    <p class="order-total mb-0"><strong>{{ order.final_price|floatformat:0 }} ₽</strong></p>
+                </div>
+            </div>
+            <div class="row order-body mb-3 mt-3 align-items-center justify-content-between">
+                <div class="dropdown col-lg-8 col-md-6 col-sm-6 w-auto" id="dropdown">
+                    <!-- Кнопка с динамическим статусом заказа -->
+                    <button class="btn dropdown-toggle" id="dropdownButton">{{ order.get_status_display }}</button>
+                    <div class="dropdown-menu p-3" id="dropdownMenu" style="min-width: 200px;">
+                        <ul class="progress-container">
+                            {% for step in order.get_status_pipeline %}
+                                <li class="step {% if step.completed %}completed{% endif %}">
+                                    <span class="step-indicator"></span>
+                                    <span>{{ step.label }}</span>
+                                </li>
+                                {% if not forloop.last %}
+                                    <li class="step-arrow">&#8595;</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
+
                 <!-- Сумма заказа -->
                 <div class="col-lg-4 col-md-6 col-sm-6 text-end">
-                    <p class="order-total mb-2"><strong>{{ order.final_price|floatformat:1 }} ₽</strong></p>
-                    <div class="d-flex justify-content-end align-items-center mb-3">
-                        <div class="order-items-images d-flex">
+                    <div class="order-items d-flex justify-content-end align-items-center">
+                        <div class="order-item-image d-flex">
                             {% for item in order.items.all|slice:":3" %}  <!-- Показываем только 3 товара -->
                                 {% if item.product.image %}
-                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded me-2" width="50" height="50">
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded me-2">
                                 {% else %}
-                                    <img src="https://dummyimage.com/50x50/dee2e6/6c757d.jpg" alt="{{ item.product.name }}" class="rounded me-2" width="50" height="50">
+                                    <img src="https://dummyimage.com/60x60/dee2e6/6c757d.jpg" alt="{{ item.product.name }}" class="rounded me-2" width="60" height="60">
                                 {% endif %}
                             {% endfor %}
                             {% if order.items.count > 3 %}
@@ -49,11 +54,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-none order-options d-flex justify-content-end">
-                    <a href="#" class="text-primary me-3">Повторить заказ</a>
-                    <a href="#" class="text-muted me-3">Скрыть заказ</a>
-                    <a href="#" class="text-muted">Что-то не так?</a>
-                </div>
+                
+            </div>
+            <div class="order-options d-flex justify-content-end">
+                <a href="#" class="text-primary me-3">Повторить заказ</a>
+                <a href="#" class="text-muted me-3">Скрыть заказ</a>
+                <a href="#" class="text-muted">Что-то не так?</a>
             </div>
         </div>
         {% endfor %}

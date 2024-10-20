@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, DetailView, ListView, UpdateView
 from django.http import JsonResponse
 from django.db import transaction
@@ -14,6 +15,7 @@ from .forms import UserProfileForm
 from .tasks import create_order_task
 from store.models import Order, Product, CartItem, PromoCode, ShoppingCart
 from .utils import get_product_count_text
+
 
 User = get_user_model()
 
@@ -33,45 +35,42 @@ def checkout(request):
     return redirect('user:order_confirmation')
 
 
-@login_required
-@require_POST
-def update_cart(request):
-    """Обработка изменения количества товаров в корзине через AJAX."""
-    product_id = request.POST.get('productId')
-    quantity = request.POST.get('quantity')
+class UpdateCartView(View):
+    """Классовое представление для обработки изменения количества товаров в корзине через AJAX."""
 
-    try:
-        quantity = int(quantity)
-    except ValueError:
-        return JsonResponse({'error': 'Некорректное количество'}, status=400)
-    # FIXME: настроить user.is_authenticated
-    # FIXME: проверить почему не обновляется поле updated_at
-    user = request.user
+    def post(self, request, *args, **kwargs):
+        product_id = request.POST.get('productId')
+        quantity = request.POST.get('quantity')
 
-    cart, created = ShoppingCart.objects.get_or_create(user=user)
+        try:
+            quantity = int(quantity)
+        except ValueError:
+            return JsonResponse({'error': 'Некорректное количество'}, status=400)
+        if not request.user.is_authenticated:
+            return JsonResponse({'redirect': reverse('login')}, status=403)
 
-    try:
-        product = Product.objects.get(id=product_id)
-    except Product.DoesNotExist:
-        return JsonResponse({'error': 'Товар не найден'}, status=404)
+        cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+        product = get_object_or_404(Product, id=product_id)
 
-    cart_item, created = CartItem.objects.get_or_create(
-        cart=cart, product=product)
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart, product=product)
 
-    if quantity == 0:
-        cart_item.delete()
-    else:
-        cart_item.quantity = quantity
-        cart_item.save()
+        if quantity == 0:
+            cart_item.delete()
+        else:
+            cart_item.quantity = quantity
+            cart_item.save()
 
-    total_items = cart.items.count()
-    total_price = cart.get_total_price()
+        cart.save()
 
-    return JsonResponse({
-        'total_items': total_items,
-        'total_price': total_price,
-        'item_quantity': cart_item.quantity if quantity > 0 else 0
-    })
+        total_items = cart.items.count()
+        total_price = cart.get_total_price()
+
+        return JsonResponse({
+            'total_items': total_items,
+            'total_price': total_price,
+            'item_quantity': cart_item.quantity if quantity > 0 else 0
+        })
 
 
 @login_required
@@ -134,7 +133,6 @@ class UserFavoriteView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # FIXME: Доделать product.is_in_cart в контекстный процессор
         context['products'] = self.object.favorites.all()
         return context
 
@@ -181,6 +179,25 @@ class UserOrderListView(LoginRequiredMixin, ListView):
             .prefetch_related('items__product__category')
             .select_related('user')
         )
+
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'store/user/order_detail.html'
+
+    def get_object(self, queryset=None):
+        queryset = (
+            self.get_queryset()
+            .filter(user=self.request.user)
+            .select_related('user')
+            .prefetch_related(
+                'items__product', 'items__product__category'
+            )
+        )
+        obj = super().get_object(queryset=queryset)
+        if obj.user != self.request.user:
+            return self.handle_no_permission()
+        return obj
 
 
 class PromoCodeListView(LoginRequiredMixin, ListView):

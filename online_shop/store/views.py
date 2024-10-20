@@ -1,3 +1,5 @@
+import random
+
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -119,6 +121,11 @@ class IndexListView(ListView):
 
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['main_categories'] = MainCategory.objects.all()
+        return context
+
 
 class MainCategoryListView(ListView):
     model = MainCategory
@@ -174,6 +181,17 @@ class ProductDetailView(DetailView):
         context['current_category'] = self.object.category
         context['current_main_category'] = self.object.category.main_category
         context['reviews'] = self.object.reviews.select_related('user')
-        context['similar_items'] = Product.objects.filter(
-            category=self.object.category)[:2]
+        similar_products = (
+            Product.objects
+            .filter(category=self.object.category)
+            .exclude(id=self.object.id)
+            .select_related('category', 'category__main_category')
+        )
+        similar_products_list = list(similar_products)
+        random_similar_products = random.sample(
+            similar_products_list,
+            min(
+                len(similar_products_list), 4)
+        )
+        context['similar_items'] = random_similar_products
         return context

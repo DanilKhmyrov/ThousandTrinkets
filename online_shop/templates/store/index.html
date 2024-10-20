@@ -1,9 +1,138 @@
 {% extends "base.html" %}
 {% load static %}
-  {% block title %}Домашняя страница магазина{% endblock title %}
+{% block title %}Домашняя страница магазина{% endblock title %}
 {% block content %}
-  {% comment %} {% include 'includes/header.html' %} {% endcomment %}
-  {% comment %} {% include 'includes/categories.html' %} {% endcomment %}
-  {% include 'includes/post_card.html' %}
-{% endblock content %}
 
+<div class="d-flex flex-row justify-content-between align-items-center">
+  <div class="d-flex flex-column align-items-start"><span>15 Mar</span><span>Order placed</span>
+  </div>
+  <div class="d-flex flex-column justify-content-center"><span>15 Mar</span><span>Order
+      placed</span></div>
+  <div class="d-flex flex-column justify-content-center align-items-center"><span>15
+      Mar</span><span>Order Dispatched</span></div>
+  <div class="d-flex flex-column align-items-center"><span>15 Mar</span><span>Out for
+      delivery</span></div>
+  <div class="d-flex flex-column align-items-end"><span>15 Mar</span><span>Delivered</span></div>
+</div>
+<section class="mb-5">
+    <div class="p-5 text-center bg-image" style="background-image: url('https://images.unsplash.com/photo-1563013544-824ae1b704d3'); height: 300px;">
+        <div class="mask" style="background-color: rgba(0, 0, 0, 0.6)">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <div class="text-white">
+                    <h1 class="mb-3">Добро пожаловать в наш интернет-магазин!</h1>
+                    <h4 class="mb-3">Товары, которые вы полюбите</h4>
+                    <a class="btn btn-outline-light btn-lg" href="#" role="button">Каталог товаров</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Модальное окно</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+              Содержимое модального окна.
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+              <button type="button" class="btn btn-primary">Сохранить изменения</button>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- Bootstrap 5 -->
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">Открыть модальное окно</button>
+
+
+<!-- О компании Section -->
+<section class="about-company-section py-5">
+  <div class="container text-center">
+      <h2 class="mb-4">Мы на рынке уже 25 лет!</h2>
+      <p class="lead">Наша компания предлагает качественные товары от ведущих производителей. Мы уверены, что у нас найдется все для вас.</p>
+      <div class="row mt-5 d-flex justify-content-center">
+          <div class="col-lg-3 col-md-6 mb-4 d-flex">
+              <div class="card shadow-sm border-0 rounded-lg text-center w-100 d-flex flex-column card-hover">
+                  <div class="card-body flex-grow-1">
+                      <i class="fas fa-boxes fa-3x mb-3 text-primary"></i>
+                      <h5 class="card-title">20,000+ товаров</h5>
+                      <p class="card-text">Широкий ассортимент товаров высокого качества, подходящих для любых нужд.</p>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4 d-flex">
+              <div class="card shadow-sm border-0 rounded-lg text-center w-100 d-flex flex-column card-hover">
+                  <div class="card-body flex-grow-1">
+                      <i class="fas fa-handshake fa-3x mb-3 text-success"></i>
+                      <h5 class="card-title">50+ поставщиков</h5>
+                      <p class="card-text">Сотрудничаем с проверенными партнерами, гарантируя качество и доступность.</p>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card shadow-sm border-0 rounded-lg text-center w-100 d-flex flex-column card-hover">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x mb-3 text-warning"></i>
+                    <h5 class="card-title">10,000+ довольных клиентов</h5>
+                    <p class="card-text">Тысячи покупателей доверяют нам и продолжают совершать покупки снова и снова.</p>
+                </div>
+            </div>
+        </div>
+          <div class="col-lg-3 col-md-6 mb-4 d-flex">
+            <div class="card shadow-sm border-0 rounded-lg text-center w-100 d-flex flex-column card-hover">
+                  <div class="card-body">
+                      <i class="fas fa-truck fa-3x mb-3 text-info"></i>
+                      <h5 class="card-title">Быстрая доставка</h5>
+                      <p class="card-text">Мы гарантируем быструю доставку благодаря отлаженной системе логистики.</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+<!-- Тематические подборки Section -->
+<section class="seasonal-themes-section py-5">
+  <div class="container text-center">
+      <h2 class="mb-4">Актуальные предложения</h2>
+      <div class="row justify-content-center">
+          <div class="col-lg-3 col-md-6 mb-4 d-flex">
+              <div class="card shadow-sm border-0 rounded-lg text-center w-100 d-flex flex-column card-hover">
+                  <div class="card-body flex-grow-1">
+                      <img src="https://images.unsplash.com/photo-1542144612-1e35c22811de" alt="Зима близко" class="img-fluid rounded mb-3">
+                      <h5 class="card-title">Зима близко</h5>
+                      <p class="card-text">Подготовьтесь к холодам: утеплители, обогреватели и многое другое.</p>
+                      <a href="#" class="btn btn-primary">Смотреть товары</a>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4 d-flex">
+              <div class="card shadow-sm border-0 rounded-lg text-center w-100 d-flex flex-column card-hover">
+                  <div class="card-body flex-grow-1">
+                      <img src="https://images.unsplash.com/photo-1559241491-4fba2ebba8a5" alt="Время сверлить" class="img-fluid rounded mb-3">
+                      <h5 class="card-title">Время сверлить</h5>
+                      <p class="card-text">Лучшие инструменты для ремонта дома и дачи.</p>
+                      <a href="#" class="btn btn-primary">Посмотреть инструменты</a>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4 d-flex">
+              <div class="card shadow-sm border-0 rounded-lg text-center w-100 d-flex flex-column card-hover">
+                  <div class="card-body flex-grow-1">
+                      <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6" alt="Весенний сад" class="img-fluid rounded mb-3">
+                      <h5 class="card-title">Весенний сад</h5>
+                      <p class="card-text">Все для вашего сада: удобрения, инструменты и многое другое для весеннего ухода за растениями.</p>
+                      <a href="#" class="btn btn-primary">Купить для сада</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+{% endblock content %}
+{% block extra_js %}
+{% endblock %}
