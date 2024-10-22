@@ -146,7 +146,15 @@ class UserShoppingCartView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        shopping_cart = self.object.shopping_cart.get()
+        try:
+            shopping_cart = self.object.shopping_cart.get()
+        except ShoppingCart.DoesNotExist:
+            context['cart_items'] = []
+            context['total_price'] = 0
+            context['discount'] = 0
+            context['promo_code_applied'] = None
+            return context
+
         context['cart_items'] = CartItem.objects.filter(
             cart=shopping_cart).select_related('product')
         total_price = shopping_cart.get_total_price()

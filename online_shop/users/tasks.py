@@ -1,6 +1,9 @@
+from datetime import timedelta
+
+from django.utils import timezone
 from celery import shared_task
 
-from store.models import Order, OrderItem, PromoCode, ShoppingCart
+from store.models import CartItem, Order, OrderItem, PromoCode, ShoppingCart
 
 
 @shared_task
@@ -49,3 +52,19 @@ def create_order_task(user_id, promo_code=None):
 
     except ShoppingCart.DoesNotExist:
         return f'Корзина пользователя {user_id} не найдена'
+
+
+@shared_task(
+    bind=True,
+    max_retries=3,
+    default_retry_delay=60,
+)
+def clear_old_shopping_cart(self):
+    """Очищает корзины пользователей, измененные более 24 часов назад."""
+    try:
+        old_carts = ShoppingCart.objects.filter(
+            updated_at__lte=timezone.now() - timedelta(hours=24)
+        )
+        CartItem.objects.filter(cart__in=old_carts).delete()
+    except Exception as e:
+        raise self.retry(exc=e)

@@ -77,3 +77,22 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+  
+  celery_beat:
+    build:
+      context: ./
+      dockerfile: ./online_shop/Dockerfile
+    command: celery -A online_shop beat --loglevel=info
+    restart: always
+    env_file: .env
+    volumes:
+      - ./online_shop:/app
+      - static:/backend_static
+      - media:/app/media
+    depends_on:
+      backend:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy

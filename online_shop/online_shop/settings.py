@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 
     'django_bootstrap5',
     'django_bootstrap_icons',
+    'django_celery_beat',
     'widget_tweaks',
 
     'store.apps.StoreConfig',
@@ -134,6 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Europe/Moscow'
+CELERY_TIMEZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -153,3 +155,4 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'rpc://'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
