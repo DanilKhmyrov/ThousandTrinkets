@@ -13,12 +13,12 @@ urlpatterns = [
     path('profile/me/', UserProfileMeView.as_view(), name='me'),
     path('profile/me/promo-codes', PromoCodeListView.as_view(), name='promo-codes'),
     path('favorites/', UserFavoriteView.as_view(), name='favorites'),
-    path('shopping-cart/', UserShoppingCartView.as_view(), name='shopping-cart'),
     path('toggle-favorite/<slug:article>/',
          toggle_favorite, name='toggle_favorite'),
+    path('shopping-cart/', UserShoppingCartView.as_view(), name='shopping-cart'),
     path('update-cart/', UpdateCartView.as_view(), name='update_cart'),
     path('order/checkout/', checkout, name='order_checkout'),
-    path('order/confirmation/', UserOrderListView.as_view(),
+    path('order/confirmation/', UserOrderListView.as_view(),  # TODO: Изменить название ендпоинта
          name='order_confirmation'),
     path('order/<int:pk>', OrderDetailView.as_view(), name='order-detail')
 ]
