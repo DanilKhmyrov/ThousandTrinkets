@@ -1,6 +1,43 @@
 $(document).ready(function() {
+    const applyPromoUrl = $('#urls').data('apply-promo');
     const updateCartUrl = $('#urls').data('update-cart-url');
     const csrftoken = $('[name=csrfmiddlewaretoken]').val();
+
+    // Применение промокода
+    $('#apply-promo-btn').on('click', function(event) {
+        event.preventDefault();
+        const promoCode = $('#promo-code-input').val();
+        if (promoCode) {
+            applyPromoCode(promoCode, applyPromoUrl, csrftoken);
+        } else {
+            $('#promo-code-message').text('Пожалуйста, введите промокод').show();
+        }
+    });
+    function applyPromoCode(promoCode, applyPromoUrl, csrftoken) {
+        $.ajax({
+            url: applyPromoUrl,
+            type: 'POST',
+            data: {
+                promo_code: promoCode,
+                csrfmiddlewaretoken: csrftoken
+            },
+            success: function(data) {
+                if (data.success) {
+                    $('#total-price').text(data.new_total_price);
+                    $('#discount').text('Скидка: ' + data.discount + ' р.');
+                    $('#promo-code-applied').text('Промокод применен: ' + promoCode);
+                    $('#promo-code-input').hide();
+                    $('#apply-promo-btn').hide();
+                } else {
+                    $('#promo-code-message').text(data.error).show();
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#promo-code-message').text('Ошибка при применении промокода.').show();
+                console.error(error);
+            }
+        });
+    }
 
     // Обновление товаров в корзине
     const catalogButtons = $('.add-to-cart-btn');
